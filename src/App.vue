@@ -4,6 +4,12 @@
     <form-component @createChart="createChart"/>
     <div class="container">
       points: {{ points }}
+      <br>
+      <br>
+      mean: {{ centerValue }}
+      <br>
+      <br>
+      standard deviation: {{ sigma }}
     </div>
   </div>
 </template>
@@ -21,16 +27,34 @@ export default {
     return {
       data: new Array(600).fill().map(() => Math.round(Math.random() * 10000) / 100),
       points: [],
-      mean: 0
+      centerValue: 0,
+      sigma: 0
     }
   },
   methods: {
     createChart (dataAmount, pointsAmount) {
-      this.points = _.chunk(this.data, dataAmount).map(data => {
+      this.points = this.makePoint(dataAmount)
+
+      const pointsToCreateChart = this.points.splice(0, pointsAmount)
+      const restPoints = this.points.splice(-pointsAmount)
+
+      this.centerValue = this.countMean(pointsToCreateChart)
+      this.sigma = this.countDeviation(pointsToCreateChart)
+    },
+    makePoint (dataAmount) {
+      return _.chunk(this.data, dataAmount).map(data => {
         return Math.round(_.mean(data) * 100) / 100
       })
+    },
+    countMean (points) {
+      return Math.round(_.mean(points) * 100) / 100
+    },
+    countDeviation (points) {
+      const powers = points.map(point => {
+        return Math.pow((point - this.centerValue), 2)
+      })
 
-      this.mean = Math.round(_.mean(this.points.splice(0, pointsAmount)) * 100) / 100
+      return Math.round(Math.sqrt(_.sum(powers) / points.length) * 1000) / 1000
     }
   }
 }
