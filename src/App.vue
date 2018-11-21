@@ -6,10 +6,16 @@
       points: {{ points }}
       <br>
       <br>
-      mean: {{ centerValue }}
+      centerValue: {{ centerValue }}
       <br>
       <br>
       standard deviation: {{ sigma }}
+      <br>
+      <br>
+      UCL value: {{ valueUCL }}
+      <br>
+      <br>
+      LCL value: {{ valueLCL }}
     </div>
   </div>
 </template>
@@ -29,6 +35,14 @@ export default {
       points: [],
       centerValue: 0,
       sigma: 0
+    }
+  },
+  computed: {
+    valueUCL () {
+      return Math.round((this.centerValue + 3 * this.sigma) * 1000) / 1000
+    },
+    valueLCL () {
+      return Math.round((this.centerValue - 3 * this.sigma) * 1000) / 1000
     }
   },
   methods: {
