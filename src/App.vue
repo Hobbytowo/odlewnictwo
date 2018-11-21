@@ -36,9 +36,11 @@ export default {
   body {
     background-color: #444;
     color: #eee;
+    font-family: 'Lato', sans-serif;
   }
 
   .title {
     text-align: center;
+    font-weight: 700;
   }
 </style>
