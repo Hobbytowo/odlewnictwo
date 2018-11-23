@@ -23,6 +23,7 @@
 <script>
 import _ from 'lodash'
 import formComponent from '@/components/form'
+import { makePoints, countMean, countDeviation, round } from '@/assets/js/helpers.js'
 
 export default {
   name: 'app',
@@ -31,7 +32,7 @@ export default {
   },
   data () {
     return {
-      data: new Array(600).fill().map(() => Math.round(Math.random() * 10000) / 100),
+      data: new Array(600).fill().map(() => _.random(0, 1e3)),
       points: [],
       centerValue: 0,
       sigma: 0
@@ -39,36 +40,21 @@ export default {
   },
   computed: {
     valueUCL () {
-      return Math.round((this.centerValue + 3 * this.sigma) * 1000) / 1000
+      return round((this.centerValue + 3 * this.sigma), 3)
     },
     valueLCL () {
-      return Math.round((this.centerValue - 3 * this.sigma) * 1000) / 1000
+      return  round((this.centerValue - 3 * this.sigma), 3)
     }
   },
   methods: {
-    createChart (dataAmount, pointsAmount) {
-      this.points = this.makePoint(dataAmount)
+    createChart (dataNumber, pointsNumber) {
+      this.points = makePoints(this.data, dataNumber)
 
-      const pointsToCreateChart = this.points.splice(0, pointsAmount)
-      const restPoints = this.points.splice(-pointsAmount)
+      const pointsToCreateChart = this.points.splice(0, pointsNumber)
+      const restPoints = this.points.splice(-pointsNumber)
 
-      this.centerValue = this.countMean(pointsToCreateChart)
-      this.sigma = this.countDeviation(pointsToCreateChart)
-    },
-    makePoint (dataAmount) {
-      return _.chunk(this.data, dataAmount).map(data => {
-        return Math.round(_.mean(data) * 100) / 100
-      })
-    },
-    countMean (points) {
-      return Math.round(_.mean(points) * 100) / 100
-    },
-    countDeviation (points) {
-      const powers = points.map(point => {
-        return Math.pow((point - this.centerValue), 2)
-      })
-
-      return Math.round(Math.sqrt(_.sum(powers) / points.length) * 1000) / 1000
+      this.centerValue = countMean(pointsToCreateChart)
+      this.sigma = countDeviation(pointsToCreateChart, this.centerValue)
     }
   }
 }
