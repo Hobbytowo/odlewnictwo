@@ -24,6 +24,7 @@
 import _ from 'lodash'
 import formComponent from '@/components/form'
 import { makePoints, countMean, countDeviation, round } from '@/assets/js/helpers.js'
+import downloadCSV from '@/assets/js/downloadCSV.js'
 
 export default {
   name: 'app',
@@ -55,6 +56,8 @@ export default {
 
       this.centerValue = countMean(pointsToCreateChart)
       this.sigma = countDeviation(pointsToCreateChart, this.centerValue)
+
+      downloadCSV()
     }
   }
 }
