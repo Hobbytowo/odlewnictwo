@@ -1,6 +1,7 @@
 import { Bar } from 'vue-chartjs'
 // eslint-disable-next-line
 import chartjsPluginAnnotation from "chartjs-plugin-annotation";
+import { round } from '@/assets/js/helpers.js'
 
 export default {
   extends: Bar,
@@ -13,13 +14,17 @@ export default {
       type: Number,
       required: true
     },
-    uclValue: {
+    sigma: {
       type: Number,
       required: true
+    }
+  },
+  computed: {
+    valueUCL () {
+      return round((this.centerValue + 3 * this.sigma), 3)
     },
-    lclValue: {
-      type: Number,
-      required: true
+    valueLCL () {
+      return  round((this.centerValue - 3 * this.sigma), 3)
     }
   },
   mounted () {
@@ -40,6 +45,8 @@ export default {
         display: true,
         text: "SPC Chart"
       },
+
+      // lines and areas
       annotation: {
         annotations: [
           {
@@ -66,7 +73,7 @@ export default {
             type: "line",
             mode: "horizontal",
             scaleID: "y-axis-0",
-            value: this.uclValue,
+            value: this.valueUCL,
             borderColor: "black",
             borderWidth: 3,
             label: {
@@ -77,13 +84,13 @@ export default {
           // e/o UCL line
           },
           {
-            // LCL line
+          // LCL line
             drawTime: "afterDatasetsDraw",
             id: "lclLine",
             type: "line",
             mode: "horizontal",
             scaleID: "y-axis-0",
-            value: this.lclValue,
+            value: this.valueLCL,
             borderColor: "black",
             borderWidth: 3,
             label: {
@@ -92,9 +99,73 @@ export default {
               enabled: true
             }
           // e/o LCL line
+          },
+
+
+          // box from 3σ to 2σ
+
+          { // upper area
+            drawTime: "afterDatasetsDraw",
+            type: "box",
+            xScaleID: "x-axis-0",
+            yScaleID: "y-axis-0",
+            yMin: this.valueUCL,
+            yMax: this.valueUCL - this.sigma,
+            backgroundColor: "rgba(180, 0, 0, 0.2)",
+            borderWidth: 0
+          }, // e/o upper area
+          { // lower area
+            drawTime: "afterDatasetsDraw",
+            type: "box",
+            xScaleID: "x-axis-0",
+            yScaleID: "y-axis-0",
+            yMin: this.valueLCL,
+            yMax: this.valueLCL + this.sigma,
+            backgroundColor: "rgba(180, 0, 0, 0.2)",
+            borderWidth: 0
+          }, // e/o lower area
+          // e/o box from 3σ to 2σ
+
+
+          // box from 2σ to 1σ
+          { // upper area
+            drawTime: "afterDatasetsDraw",
+            type: "box",
+            xScaleID: "x-axis-0",
+            yScaleID: "y-axis-0",
+            yMax: this.valueUCL - this.sigma,
+            yMin: this.centerValue + this.sigma,
+            backgroundColor: "rgb(255, 170, 60, 0.2)",
+            borderWidth: 0
+          }, // e/o upper area
+          { // lower area
+            drawTime: "afterDatasetsDraw",
+            type: "box",
+            xScaleID: "x-axis-0",
+            yScaleID: "y-axis-0",
+            yMin: this.valueLCL + this.sigma,
+            yMax: this.centerValue + this.sigma,
+            backgroundColor: "rgba(255, 170, 60, 0.2)",
+            borderWidth: 0
+          }, // e/o lower area
+          // e/o box from 2σ to 1σ
+
+
+          // box 1σ
+          {
+            drawTime: "afterDatasetsDraw",
+            type: "box",
+            xScaleID: "x-axis-0",
+            yScaleID: "y-axis-0",
+            yMin: this.centerValue + this.sigma,
+            yMax: this.centerValue - this.sigma,
+            backgroundColor: "rgb(146, 244, 66, 0.2)",
+            borderWidth: 0
           }
+          // e/o box 1σ
         ]
       }
+      // e/o lines and areas
     }
     // e/o options
   )}

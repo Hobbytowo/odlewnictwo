@@ -4,8 +4,7 @@
       <spc-chart
         :chart-data="pointsToTest"
         :center-value="centerValue"
-        :ucl-value="valueUCL"
-        :lcl-value="valueLCL"
+        :sigma="sigma"
       />
     </div>
   </div>
@@ -35,12 +34,6 @@ export default {
     },
     sigma () {
       return countDeviation(this.pointsToCreateChart, this.centerValue)
-    },
-    valueUCL () {
-      return round((this.centerValue + 3 * this.sigma), 3)
-    },
-    valueLCL () {
-      return  round((this.centerValue - 3 * this.sigma), 3)
     }
   },
   methods: {
