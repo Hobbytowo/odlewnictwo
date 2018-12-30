@@ -1,4 +1,6 @@
 import { Bar } from 'vue-chartjs'
+// eslint-disable-next-line
+import chartjsPluginAnnotation from "chartjs-plugin-annotation";
 
 export default {
   extends: Bar,
@@ -26,25 +28,74 @@ export default {
       datasets: [
         {
           type: 'scatter',
-          label: 'GitHub Commits',
+          label: 'point',
+          pointBackgroundColor: 'green',
           data: this.chartData
-        },
-        {
-          type: 'line',
-          label: 'center value',
-          data: new Array(this.chartData.length).fill(this.centerValue)
-        },
-        {
-          type: 'line',
-          label: 'UCL value',
-          data: new Array(this.chartData.length).fill(this.uclValue)
-        },
-        {
-          type: 'line',
-          label: 'LCL value',
-          data: new Array(this.chartData.length).fill(this.lclValue)
         }
-      ]
-    })
-  }
+      ],
+    },
+    // options
+    {
+      title: {
+        display: true,
+        text: "SPC Chart"
+      },
+      annotation: {
+        annotations: [
+          {
+            // center line
+            drawTime: "afterDatasetsDraw",
+            id: "centerLine",
+            type: "line",
+            mode: "horizontal",
+            scaleID: "y-axis-0",
+            value: this.centerValue,
+            borderColor: "black",
+            borderWidth: 3,
+            label: {
+              backgroundColor: "green",
+              content: "center",
+              enabled: true
+            }
+            // e/o center line
+          },
+          {
+            // UCL line
+            drawTime: "afterDatasetsDraw",
+            id: "uclLine",
+            type: "line",
+            mode: "horizontal",
+            scaleID: "y-axis-0",
+            value: this.uclValue,
+            borderColor: "black",
+            borderWidth: 3,
+            label: {
+              backgroundColor: "red",
+              content: "UCL",
+              enabled: true
+            }
+          // e/o UCL line
+          },
+          {
+            // LCL line
+            drawTime: "afterDatasetsDraw",
+            id: "lclLine",
+            type: "line",
+            mode: "horizontal",
+            scaleID: "y-axis-0",
+            value: this.lclValue,
+            borderColor: "black",
+            borderWidth: 3,
+            label: {
+              backgroundColor: "red",
+              content: "LCL",
+              enabled: true
+            }
+          // e/o LCL line
+          }
+        ]
+      }
+    }
+    // e/o options
+  )}
 }
