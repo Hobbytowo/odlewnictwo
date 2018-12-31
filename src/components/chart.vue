@@ -30,10 +30,14 @@ export default {
   },
   computed: {
     centerValue () {
-      return countMean(this.pointsToCreateChart)
+      return this.pointsToCreateChart
+        ? countMean(this.pointsToCreateChart)
+        : 0
     },
     sigma () {
-      return countDeviation(this.pointsToCreateChart, this.centerValue)
+      return this.centerValue
+        ? countDeviation(this.pointsToCreateChart, this.centerValue)
+        : 0
     }
   },
   methods: {

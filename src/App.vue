@@ -4,7 +4,7 @@
     <form-component @createChart="createChart"/>
     <chart
       :points-to-create-chart="pointsToCreateChart"
-      :points-to-test="points"
+      :points-to-test="pointsToTest"
     />
   </div>
 </template>
@@ -24,14 +24,25 @@ export default {
   data () {
     return {
       data: new Array(600).fill().map(() => _.random(0, 1e3)),
-      points: [],
-      pointsToCreateChart: []
+      dataNumber: 0,
+      pointsNumber: 0
+    }
+  },
+  computed: {
+    points () {
+      return makePoints(this.data, this.dataNumber)
+    },
+    pointsToCreateChart () {
+      return [...this.points].splice(0, this.pointsNumber)
+    },
+    pointsToTest () {
+      return  [...this.points].splice(this.pointsNumber)
     }
   },
   methods: {
     createChart (dataNumber, pointsNumber) {
-      this.points = makePoints(this.data, dataNumber)
-      this.pointsToCreateChart = this.points.splice(0, pointsNumber)
+      this.dataNumber = dataNumber
+      this.pointsNumber = pointsNumber
     }
   }
 }
