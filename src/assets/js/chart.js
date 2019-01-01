@@ -45,6 +45,9 @@ export default {
       },
       // options
       {
+        legend: {
+          display: false
+        },
         // lines and areas
         annotation: {
           annotations: [
