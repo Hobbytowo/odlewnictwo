@@ -12,7 +12,7 @@
 
 <script>
 import spcChart from '@/assets/js/chart.js'
-import { countMean, countDeviation, round } from '@/assets/js/helpers.js'
+import { countMean, countDeviation, round } from '@/assets/js/operationsHelpers.js'
 
 export default {
   props: {

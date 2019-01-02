@@ -13,7 +13,7 @@
 import _ from 'lodash'
 import formComponent from '@/components/form'
 import chart from '@/components/chart'
-import { makePoints } from '@/assets/js/helpers.js'
+import { makePoints } from '@/assets/js/operationsHelpers.js'
 
 export default {
   name: 'app',

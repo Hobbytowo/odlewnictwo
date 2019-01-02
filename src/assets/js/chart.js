@@ -1,7 +1,7 @@
 import { Bar } from 'vue-chartjs'
 // eslint-disable-next-line
 import chartjsPluginAnnotation from "chartjs-plugin-annotation";
-import { round } from '@/assets/js/helpers.js'
+import { round } from '@/assets/js/operationsHelpers.js'
 
 export default {
   extends: Bar,
