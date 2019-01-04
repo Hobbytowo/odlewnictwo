@@ -12,7 +12,7 @@
 
 <script>
 import spcChart from '@/assets/js/chart.js'
-import { countMean, countDeviation, round } from '@/assets/js/operationsHelpers.js'
+import { countMean, countDeviation } from '@/assets/js/operationsHelpers.js'
 
 export default {
   props: {
@@ -23,6 +23,10 @@ export default {
     pointsToTest: {
       type: Array,
       default: () => []
+    },
+    isEnoughData: {
+      type: Boolean,
+      default: false
     }
   },
   components: {

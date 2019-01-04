@@ -5,6 +5,7 @@
     <chart
       :points-to-create-chart="pointsToCreateChart"
       :points-to-test="pointsToTest"
+      :isEnoughData="this.isEnoughData"
     />
   </div>
 </template>
@@ -37,6 +38,9 @@ export default {
     },
     pointsToTest () {
       return  [...this.points].splice(this.pointsNumber)
+    },
+    isEnoughData () {
+      return ((this.dataNumber * this.pointsNumber) <= this.data.length)
     }
   },
   methods: {

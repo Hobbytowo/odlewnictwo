@@ -1,7 +1,8 @@
 import { Bar } from 'vue-chartjs'
 // eslint-disable-next-line
 import chartjsPluginAnnotation from "chartjs-plugin-annotation";
-import { round } from '@/assets/js/operationsHelpers.js'
+import { round } from '@/assets/js/operationsHelpers'
+import showMessage from '@/assets/js/chartPlugins/message'
 
 export default {
   extends: Bar,
@@ -32,6 +33,8 @@ export default {
   },
   methods: {
     renderSpcChart () {
+      showMessage(this, 'test text')
+
       this.renderChart({
         labels: new Array(this.chartData.length).fill().map((x, i) => i),
         datasets: [
