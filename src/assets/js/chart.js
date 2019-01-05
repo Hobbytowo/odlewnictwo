@@ -1,6 +1,8 @@
 import { Bar } from 'vue-chartjs'
 // eslint-disable-next-line
 import chartjsPluginAnnotation from "chartjs-plugin-annotation";
+// eslint-disable-next-line
+import chartjsPluginZoom from "chartjs-plugin-zoom";
 import { round } from '@/assets/js/operationsHelpers'
 import showMessage from '@/assets/js/chartPlugins/message'
 import createAnnotations from '@/assets/js/chartPlugins/annotations'
@@ -62,10 +64,31 @@ export default {
       {
         responsive: true,
         maintainAspectRatio: false,
-        legend: {
-          display: false
+        legend: { display: false },
+        annotation: createAnnotations(this.centerValue, this.valueUCL, this.valueLCL, this.sigma),
+        // zoom
+        scales: {
+          xAxes: [{
+            ticks: {
+              beginAtZero: true,
+              min: this.chartData.length - 25,
+              max: this.chartData.length - 1,
+              stepSize: 0.4
+            },
+            scaleLabel: {
+              display: true
+            }
+          }]
         },
-        annotation: createAnnotations(this.centerValue, this.valueUCL, this.valueLCL, this.sigma)
+        pan: {
+          enabled: true,
+          mode: 'x'
+        },
+        zoom: {
+          enabled: true,
+          mode: 'x',
+        }
+        // e.o zoom
       })
       // e/o options
     }

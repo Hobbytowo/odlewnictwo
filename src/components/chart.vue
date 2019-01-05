@@ -6,6 +6,7 @@
         :center-value="centerValue"
         :sigma="sigma"
         :isEnoughData="this.isEnoughData"
+        class="chart"
       />
     </div>
   </div>
@@ -53,5 +54,9 @@ export default {
     background-color: #ddd;
     padding: 50px;
     margin: 20px 50px;
+  }
+
+  .chart {
+    cursor: e-resize;
   }
 </style>
