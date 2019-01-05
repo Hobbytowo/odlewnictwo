@@ -56,6 +56,7 @@ export default {
             type: 'scatter',
             label: 'point',
             pointBackgroundColor: 'green',
+            backgroundColor: 'transparent',
             data: this.chartData
           }
         ],
