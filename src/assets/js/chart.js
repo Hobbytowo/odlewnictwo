@@ -18,6 +18,10 @@ export default {
     sigma: {
       type: Number,
       required: true
+    },
+    isEnoughData: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -33,8 +37,15 @@ export default {
   },
   methods: {
     renderSpcChart () {
-      showMessage(this, 'test text')
+      if (!this.isEnoughData) { // if there is not enough data
+        showMessage(this, 'Not enough data to create chart')
+        this.renderChart({
+          labels: new Array(this.chartData.length).fill().map((x, i) => i)
+        }, { maintainAspectRatio: false })
+        return
+      }
 
+      // if there is not enough data
       this.renderChart({
         labels: new Array(this.chartData.length).fill().map((x, i) => i),
         datasets: [

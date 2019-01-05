@@ -5,6 +5,7 @@
         :chart-data="pointsToTest"
         :center-value="centerValue"
         :sigma="sigma"
+        :isEnoughData="this.isEnoughData"
       />
     </div>
   </div>

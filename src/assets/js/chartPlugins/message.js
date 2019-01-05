@@ -9,9 +9,9 @@ export default function showMessage (that, message) {
       const height = chart.chart.height
       const ctx = chart.chart.ctx
 
-      const fontSize = (height / 150).toFixed(2)
+      const fontSize = (height / 180).toFixed(2)
       const text = message
-      const textX = Math.round((width - ctx.measureText(text).width) / 2)
+      const textX = Math.round((width - ctx.measureText(text).width) / 4)
       const textY = height / 2.3
 
       ctx.restore()
