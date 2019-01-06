@@ -48,7 +48,7 @@ export default {
         return
       }
 
-      // if there is not enough data
+      // if there is enough data
       this.renderChart({
         labels: new Array(this.chartData.length).fill().map((x, i) => i),
         datasets: [
