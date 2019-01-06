@@ -1,7 +1,7 @@
 // Western Electric rules
 // https://en.wikipedia.org/wiki/Western_Electric_rules
 
-const data = [2,5,8,8,85, 10,4,4,5,5,8,8,7]
+const data = [2,5,8,8,85,10,5,6,5, 3, 4, 6 ,5, 4, 4,4,5,5,8,8,7]
 
 function createArrays (data, numberOfDataInArr) {
   const arr = []
@@ -53,9 +53,23 @@ export function checkRule2 (values) {
 
   const arr3 = createArrays(values, 3)
   return arr3.filter(arr => {
-    return checkRuleOneUpper(arr) < 2 && checkRuleOneLower(arr) < 2
+    return checkRuleOneUpper(arr) > 1 || checkRuleOneLower(arr) > 1
   })
 }
 
-console.log(checkRule2(data))
+checkRule2(data)
 // e.o rule 2
+
+// rule 4 - Nine consecutive points fall on the same side of the centerline (in zone C or beyond)
+const center = 8
+
+export function checkRule4 (values) {
+  const arr9 = createArrays(values, 9)
+
+  return arr9.filter(arr => {
+    return arr.every(point => point > center) || arr.every(point => point < center)
+  })
+}
+
+checkRule4(data)
+// e.o rule 4
