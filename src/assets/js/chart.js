@@ -33,6 +33,13 @@ export default {
     },
     valueLCL () {
       return  round((this.centerValue - 3 * this.sigma), 3)
+    },
+    pointsColors () {
+      return this.chartData.map(x => {
+        return (x > this.valueUCL || x < this.valueLCL)
+          ? 'red'
+          : 'green'
+      })
     }
   },
   mounted () {
@@ -55,7 +62,7 @@ export default {
           {
             type: 'scatter',
             label: 'point',
-            pointBackgroundColor: 'green',
+            pointBackgroundColor: this.pointsColors,
             backgroundColor: 'transparent',
             data: this.chartData
           }
@@ -72,7 +79,7 @@ export default {
           xAxes: [{
             ticks: {
               beginAtZero: true,
-              min: this.chartData.length - 25,
+              min: this.chartData.length - 90,
               max: this.chartData.length - 1,
               stepSize: 0.4
             },
@@ -88,7 +95,7 @@ export default {
         zoom: {
           enabled: true,
           mode: 'x',
-        }
+        },
         // e.o zoom
       })
       // e/o options
