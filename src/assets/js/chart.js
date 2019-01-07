@@ -79,7 +79,7 @@ export default {
           xAxes: [{
             ticks: {
               beginAtZero: true,
-              min: this.chartData.length - 90,
+              min: this.chartData.length - 15,
               max: this.chartData.length - 1,
               stepSize: 0.4
             },
