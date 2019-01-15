@@ -17,5 +17,5 @@ export function countDeviation (points, centerValue) {
     return (point - centerValue) ** 2
   })
 
-  return _.round(Math.sqrt(_.sum(powers) / points.length), 3)
+  return round(Math.sqrt(_.sum(powers) / points.length), 3)
 }

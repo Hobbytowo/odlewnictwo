@@ -8,7 +8,7 @@
 
       <div class="data">
         <label class="label" for="NumberOfPoints">Number of points to create chart:</label>
-        <input v-model="NumberOfPoints" class="input" type="number" min="0" id="NumberOfPoints">
+        <input v-model="numberOfPoints" class="input" type="number" min="0" id="numberOfPoints">
       </div>
     </div>
     <button @click="createChart" class="button" type="button" name="button">
@@ -22,12 +22,12 @@ export default {
   data () {
     return {
       numberOfData: 6,
-      NumberOfPoints: 8
+      numberOfPoints: 8
     }
   },
   methods: {
     createChart () {
-      this.$emit('createChart', this.numberOfData, this.NumberOfPoints)
+      this.$emit('createChart', this.numberOfData, this.numberOfPoints)
     }
   }
 }

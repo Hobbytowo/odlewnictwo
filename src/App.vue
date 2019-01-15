@@ -2,60 +2,52 @@
   <div class="">
     <h1 class="title">Statistical Process Control - control chart</h1>
     <form-component @createChart="createChart"/>
-    <div class="container">
-      points: {{ points }}
-      <br>
-      <br>
-      centerValue: {{ centerValue }}
-      <br>
-      <br>
-      standard deviation: {{ sigma }}
-      <br>
-      <br>
-      UCL value: {{ valueUCL }}
-      <br>
-      <br>
-      LCL value: {{ valueLCL }}
-    </div>
+    <chart
+      :points-to-create-chart="pointsToCreateChart"
+      :points-to-test="pointsToTest"
+      :isEnoughData="this.isEnoughData"
+    />
   </div>
 </template>
 
 <script>
 import _ from 'lodash'
 import formComponent from '@/components/form'
-import { makePoints, countMean, countDeviation, round } from '@/assets/js/helpers.js'
 import downloadCSV from '@/assets/js/downloadCSV.js'
+import chart from '@/components/chart'
+import { makePoints } from '@/assets/js/operationsHelpers.js'
 
 export default {
   name: 'app',
   components: {
-    formComponent
+    formComponent,
+    chart
   },
   data () {
     return {
       data: new Array(600).fill().map(() => _.random(0, 1e3)),
-      points: [],
-      centerValue: 0,
-      sigma: 0
+      dataNumber: 0,
+      pointsNumber: 0
     }
   },
   computed: {
-    valueUCL () {
-      return round((this.centerValue + 3 * this.sigma), 3)
+    points () {
+      return makePoints(this.data, this.dataNumber)
     },
-    valueLCL () {
-      return  round((this.centerValue - 3 * this.sigma), 3)
+    pointsToCreateChart () {
+      return [...this.points].splice(0, this.pointsNumber)
+    },
+    pointsToTest () {
+      return  [...this.points].splice(this.pointsNumber)
+    },
+    isEnoughData () {
+      return ((this.dataNumber * this.pointsNumber) <= this.data.length)
     }
   },
   methods: {
     createChart (dataNumber, pointsNumber) {
-      this.points = makePoints(this.data, dataNumber)
-
-      const pointsToCreateChart = this.points.splice(0, pointsNumber)
-      const restPoints = this.points.splice(-pointsNumber)
-
-      this.centerValue = countMean(pointsToCreateChart)
-      this.sigma = countDeviation(pointsToCreateChart, this.centerValue)
+      this.dataNumber = dataNumber
+      this.pointsNumber = pointsNumber
 
       downloadCSV()
     }
@@ -69,7 +61,6 @@ export default {
     color: #eee;
     font-family: 'Lato', sans-serif;
   }
-
   .title {
     text-align: center;
     font-weight: 700;
