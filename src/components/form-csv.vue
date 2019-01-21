@@ -1,27 +1,38 @@
 <template lang="html">
-  <input type="file" @change="updateData($event)">
+  <div class="">
+    <input type="file" @change="updateData($event)">
+  </div>
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      path: ''
+    }
+  },
   methods: {
     updateData(e) {
-      if (window.FileReader) {
-        const reader = new FileReader()
-        reader.readAsText(e.target.files[0])
+      const reader = new FileReader()
+      reader.readAsText(e.target.files[0])
 
-        reader.onload = event => {
-          const csv = event.target.result
-          console.log(csv)
-        }
-        reader.onerror = event => {
-          if (evt.target.error.name === "NotReadableError") {
-            alert("Canno't read file !")
-          }
-        }
-      } else {
-        alert('FileReader are not supported in this browser.')
+      reader.onload = event => {
+        const csv = event.target.result
+        const dataArray = this.parseCSV(csv)
+        console.log(dataArray)
       }
+
+      reader.onerror = event => {
+        if (evt.target.error.name === "NotReadableError") {
+          alert("Canno't read file")
+        }
+      }
+    },
+    parseCSV (csv) {
+      return csv.split('\n')
+        .map(data => data.replace('\r', ''))
+        .filter(data => data)
+        .map(data => data.replace(',', '.') * 1)
     }
   }
 }
