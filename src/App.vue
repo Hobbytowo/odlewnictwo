@@ -1,6 +1,5 @@
 <template>
   <div class="">
-    <h1 class="title">Statistical Process Control - control chart</h1>
     <form-component @createChart="createChart"/>
     <form-csv @onUpdateDate="updateDate"/>
     <chart
@@ -66,10 +65,5 @@ export default {
     background-color: #444;
     color: #eee;
     font-family: 'Lato', sans-serif;
-  }
-  .title {
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 40px;
   }
 </style>
