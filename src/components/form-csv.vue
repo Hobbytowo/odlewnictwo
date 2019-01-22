@@ -8,7 +8,7 @@
 export default {
   data () {
     return {
-      path: ''
+      data: []
     }
   },
   methods: {
@@ -18,8 +18,7 @@ export default {
 
       reader.onload = event => {
         const csv = event.target.result
-        const dataArray = this.parseCSV(csv)
-        console.log(dataArray)
+        this.data = this.parseCSV(csv)
       }
 
       reader.onerror = event => {
@@ -33,6 +32,11 @@ export default {
         .map(data => data.replace('\r', ''))
         .filter(data => data)
         .map(data => data.replace(',', '.') * 1)
+    }
+  },
+  watch: {
+    data () {
+      console.log('data changed')
     }
   }
 }
