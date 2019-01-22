@@ -49,11 +49,8 @@ export default {
     }
   },
   methods: {
-    createChart (dataNumber, pointsNumber) {
-      this.dataNumber = dataNumber
-      this.pointsNumber = pointsNumber
-
-      downloadCSV()
+    createChart () {
+      clearData()
     },
     updateDate (data) {
       console.log(data)
