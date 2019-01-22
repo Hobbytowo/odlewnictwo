@@ -1,7 +1,11 @@
 <template>
-  <div class="">
-    <form-component @createChart="createChart"/>
+  <div class="container">
+    <button class="button" @click="createChart">
+      Create chart
+    </button>
+
     <form-csv @onUpdateDate="updateDate"/>
+
     <chart
       :points-to-create-chart="pointsToCreateChart"
       :points-to-test="pointsToTest"
@@ -12,24 +16,22 @@
 
 <script>
 import _ from 'lodash'
-import formComponent from '@/components/form'
 import formCsv from '@/components/form-csv'
-import downloadCSV from '@/assets/js/downloadCSV.js'
+import clearData from '@/assets/js/clearData.js'
 import chart from '@/components/chart'
 import { makePoints } from '@/assets/js/operationsHelpers.js'
 
 export default {
   name: 'app',
   components: {
-    formComponent,
     formCsv,
     chart
   },
   data () {
     return {
       data: new Array(600).fill().map(() => _.random(0, 1e3)),
-      dataNumber: 0,
-      pointsNumber: 0
+      dataNumber: 5,
+      pointsNumber: 6
     }
   },
   computed: {
