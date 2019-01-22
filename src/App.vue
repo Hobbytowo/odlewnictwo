@@ -2,6 +2,7 @@
   <div class="">
     <h1 class="title">Statistical Process Control - control chart</h1>
     <form-component @createChart="createChart"/>
+    <form-csv @onUpdateDate="updateDate"/>
     <chart
       :points-to-create-chart="pointsToCreateChart"
       :points-to-test="pointsToTest"
@@ -13,6 +14,8 @@
 <script>
 import _ from 'lodash'
 import formComponent from '@/components/form'
+import formCsv from '@/components/form-csv'
+import downloadCSV from '@/assets/js/downloadCSV.js'
 import chart from '@/components/chart'
 import { makePoints } from '@/assets/js/operationsHelpers.js'
 
@@ -20,6 +23,7 @@ export default {
   name: 'app',
   components: {
     formComponent,
+    formCsv,
     chart
   },
   data () {
@@ -47,6 +51,11 @@ export default {
     createChart (dataNumber, pointsNumber) {
       this.dataNumber = dataNumber
       this.pointsNumber = pointsNumber
+
+      downloadCSV()
+    },
+    updateDate (data) {
+      console.log(data)
     }
   }
 }
