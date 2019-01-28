@@ -4,7 +4,7 @@
       ref="start"
       type="button"
       @click="startWatching"
-      v-text="'Select folder to watch'"
+      v-text="'Select file'"
     />
 
     <button
@@ -55,46 +55,31 @@ export default {
         persistent: true
       })
 
-      function onWatcherReady() {
-        console.log('From here can you check for real changes, the initial scan has been completed.')
-      }
-
       this.watcher
-      .on('add', function (path) {
+      .on('add', path => {
         console.log('File', path, 'has been added')
       })
-      .on('addDir', function (path) {
-         console.log('Directory', path, 'has been added')
-       })
-      .on('change', function (path) {
+      .on('change', path => {
         console.log('File', path, 'has been changed')
       })
-      .on('unlink', function (path) {
-        console.log('File', path, 'has been removed')
+      .on('error', error => {
+        console.error('Error happened', error)
       })
-      .on('unlinkDir', function (path) {
-        console.log('Directory', path, 'has been removed')
-      })
-      .on('error', function (error) {
-        console.log('Error happened', error)
-      })
-      .on('ready', onWatcherReady)
-      .on('raw', function(event, path, details) {
-        // This event should be triggered everytime something happens.
-        console.log('Raw event info:', event, path, details)
-      })
+      .on('ready', () => {
+        console.log('The initial scan has been completed.'
+      )})
     },
     startWatching () {
       const { dialog } = require('electron').remote
       const vm = this
 
       dialog.showOpenDialog({
-        properties: ['openDirectory']
-      }, function (path) {
+        properties: ['openFile']
+      }, path => {
         if (path) {
           vm.startWatcher(path[0])
         } else {
-          console.log("No path selected")
+          console.log("No file selected")
         }
       })
     },
@@ -106,11 +91,6 @@ export default {
         this.$refs.start.disabled = false
         console.log("Nothing is being watched")
       }
-    }
-  },
-  watch: {
-    data () {
-      console.log('data changed')
     }
   }
 }
