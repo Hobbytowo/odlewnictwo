@@ -1,9 +1,5 @@
 <template>
   <div class="container">
-    <button class="button" @click="createChart">
-      Create chart
-    </button>
-
     <form-csv @onUpdateDate="updateDate"/>
 
     <chart

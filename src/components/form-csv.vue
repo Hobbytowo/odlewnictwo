@@ -1,14 +1,21 @@
 <template lang="html">
-  <div class="">
+  <div class="buttons">
     <button
-      ref="start"
+      class="button button--select"
       type="button"
-      @click="startWatching"
+      @click="selectFile"
       v-text="'Select file'"
     />
 
     <button
-      ref="stop"
+      class="button button--start"
+      type="button"
+      @click="startWatching"
+      v-text="'Start watching'"
+    />
+
+    <button
+      class="button button--stop"
       type="button"
       @click="stopWatching"
       v-text="'Stop watching'"
@@ -29,38 +36,38 @@ export default {
     }
   },
   methods: {
-    startWatcher (path) {
-      this.watcher = chokidar.watch(path, {
-        ignored: /[\/\\]\./,
-        persistent: true
-      })
-
-      this.watcher
-      .on('add', path => {
-        this.path = path
-        const data = fs.readFileSync(path)
-        this.data = this.parseCSV(data)
-        this.$emit('onUpdateDate', this.data)
-      })
-      .on('change', path => {
-        const data = fs.readFileSync(this.path)
-        this.data = this.parseCSV(data)
-        this.$emit('onUpdateDate', this.data)
-      })
-      .on('error', error => {
-        console.error('Error happened', error)
-      })
-    },
-    startWatching () {
+    selectFile () {
       const { dialog } = require('electron').remote
-      const vm = this
 
       dialog.showOpenDialog({
         properties: ['openFile']
       }, path => {
         path
-          ? vm.startWatcher(path[0])
+          ? this.path = path[0]
           : console.log("No file selected")
+      })
+    },
+    startWatching () {
+      this.watcher = chokidar.watch(this.path, {
+        ignored: /[\/\\]\./,
+        persistent: true
+      })
+
+      // initial data
+      const fileData = fs.readFileSync(this.path)
+      this.data = this.parseCSV(fileData)
+      this.$emit('onUpdateDate', this.data)
+      console.log(this.path, 'watchiiing')
+      // e/o initial data
+
+      this.watcher
+      .on('change', () => {
+        const fileData = fs.readFileSync(this.path)
+        this.data = this.parseCSV(fileData)
+        this.$emit('onUpdateDate', this.data)
+      })
+      .on('error', error => {
+        console.error('Error happened', error)
       })
     },
     stopWatching () {
@@ -68,7 +75,6 @@ export default {
         console.log("You need to start first the watcher")
       } else {
         this.watcher.close()
-        this.$refs.start.disabled = false
         console.log("Nothing is being watched")
       }
     },
@@ -83,4 +89,37 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    padding: 0 50px;
+  }
+
+  .button {
+    width: 160px;
+    height: 70px;
+    border-radius: 35px;
+    border: 3px solid white;
+    cursor: pointer;
+    padding: 10px;
+    margin: 15px 0;
+
+    background-color: #222;
+    color: white;
+    font-size: 21px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    outline: none;
+    transition: all 0.3s;
+
+    &:hover {
+      background-color: #555;
+    }
+  }
 </style>
