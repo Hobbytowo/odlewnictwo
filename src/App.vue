@@ -29,7 +29,7 @@ export default {
   },
   data () {
     return {
-      data: new Array(600).fill().map(() => _.random(0, 1e3)),
+      data: [],
       dataNumber: 5,
       pointsNumber: 6
     }
