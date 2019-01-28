@@ -53,7 +53,8 @@ export default {
       clearData()
     },
     updateDate (data) {
-      console.log(data)
+      this.data = data
+      console.log('data from app', data)
     }
   }
 }
