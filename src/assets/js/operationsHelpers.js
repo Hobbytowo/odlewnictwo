@@ -5,7 +5,9 @@ export function round (nr, space) {
 }
 
 export function makePoints (data, dataNumber) {
-  return _.chunk(data, dataNumber).map(countMean)
+  return _.chunk(data, dataNumber)
+  .filter(arr => arr.length === 5)
+  .map(countMean)
 }
 
 export function countMean (points) {
