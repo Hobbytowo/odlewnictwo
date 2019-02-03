@@ -1,12 +1,7 @@
 <template>
   <div class="container">
-    <form-csv @onUpdateDate="updateDate"/>
-
-    <chart
-      :points-to-create-chart="pointsToCreateChart"
-      :points-to-test="pointsToTest"
-      :isEnoughData="this.isEnoughData"
-    />
+    <form-csv/>
+    <chart/>
   </div>
 </template>
 
@@ -14,45 +9,18 @@
 import _ from 'lodash'
 import formCsv from '@/components/form-csv'
 import chart from '@/components/chart'
-import { makePoints } from '@/assets/js/operationsHelpers.js'
+import { store } from './store/index.js'
 
 export default {
   name: 'app',
   components: {
     formCsv,
     chart
-  },
-  data () {
-    return {
-      data: [],
-      dataNumber: 5,
-      pointsNumber: 6
-    }
-  },
-  computed: {
-    points () {
-      return makePoints(this.data, this.dataNumber)
-    },
-    pointsToCreateChart () {
-      return [...this.points].splice(0, this.pointsNumber)
-    },
-    pointsToTest () {
-      return  [...this.points].splice(this.pointsNumber)
-    },
-    isEnoughData () {
-      return ((this.dataNumber * this.pointsNumber) <= this.data.length)
-    }
-  },
-  methods: {
-    updateDate (data) {
-      this.data = data
-      console.log('data from app', data)
-    }
   }
 }
 </script>
 
-<style lang="css">
+<style lang="scss">
   body {
     background-color: #444;
     color: #eee;

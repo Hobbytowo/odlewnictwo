@@ -30,7 +30,6 @@ import fs from 'fs'
 export default {
   data () {
     return {
-      data: [],
       watcher: null,
       path: ''
     }
@@ -39,9 +38,7 @@ export default {
     selectFile () {
       const { dialog } = require('electron').remote
 
-      dialog.showOpenDialog({
-        properties: ['openFile']
-      }, path => {
+      dialog.showOpenDialog({ properties: ['openFile']}, path => {
         path
           ? this.path = path[0]
           : console.log("No file selected")
@@ -55,16 +52,17 @@ export default {
 
       // initial data
       const fileData = fs.readFileSync(this.path)
-      this.data = this.parseCSV(fileData)
-      this.$emit('onUpdateDate', this.data)
-      console.log(this.path, 'watchiiing')
+      const parsedData = this.parseCSV(fileData)
+      this.$store.commit('updateData', parsedData)
+      console.log('add', this.$store.state.data)
       // e/o initial data
 
       this.watcher
       .on('change', () => {
         const fileData = fs.readFileSync(this.path)
-        this.data = this.parseCSV(fileData)
-        this.$emit('onUpdateDate', this.data)
+        const parsedData = this.parseCSV(fileData)
+        this.$store.commit('updateData', parsedData)
+        console.log('change', this.$store.state.data)
       })
       .on('error', error => {
         console.error('Error happened', error)

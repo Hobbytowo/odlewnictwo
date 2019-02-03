@@ -3,41 +3,19 @@ import { Bar } from 'vue-chartjs'
 import chartjsPluginAnnotation from "chartjs-plugin-annotation";
 // eslint-disable-next-line
 import chartjsPluginZoom from "chartjs-plugin-zoom";
-import { round } from '@/assets/js/operationsHelpers'
 import showMessage from '@/assets/js/chartPlugins/message'
 import clearChart from '@/assets/js/chartPlugins/clearChart'
 import createAnnotations from '@/assets/js/chartPlugins/annotations'
 
 export default {
   extends: Bar,
-  props: {
-    chartData: {
-      type: Array,
-      required: true
-    },
-    centerValue: {
-      type: Number,
-      required: true
-    },
-    sigma: {
-      type: Number,
-      required: true
-    },
-    isEnoughData: {
-      type: Boolean,
-      default: false
-    }
-  },
   computed: {
-    valueUCL () {
-      return round((this.centerValue + 3 * this.sigma), 3)
-    },
-    valueLCL () {
-      return  round((this.centerValue - 3 * this.sigma), 3)
+    chartData () {
+      return this.$store.getters.pointsToTest
     },
     pointsColors () {
       return this.chartData.map(x => {
-        return (x > this.valueUCL || x < this.valueLCL)
+        return (x > this.$store.getters.valueUCL || x < this.$store.getters.valueLCL)
           ? 'red'
           : 'green'
       })
@@ -49,7 +27,7 @@ export default {
   methods: {
     renderSpcChart () {
       // if there is not enough data
-      if (!this.isEnoughData) {
+      if (!this.$store.getters.isEnoughData) {
         showMessage(this, 'Not enough data to create chart')
         this.renderChart({ labels: []}, { maintainAspectRatio: false })
 
@@ -75,7 +53,7 @@ export default {
         responsive: true,
         maintainAspectRatio: false,
         legend: { display: false },
-        annotation: createAnnotations(this.centerValue, this.valueUCL, this.valueLCL, this.sigma),
+        annotation: createAnnotations(this.$store.getters),
         // zoom
         scales: {
           xAxes: [{
