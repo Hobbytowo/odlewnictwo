@@ -6,6 +6,7 @@ import chartjsPluginZoom from "chartjs-plugin-zoom";
 import showMessage from '@/assets/js/chartPlugins/message'
 import clearChart from '@/assets/js/chartPlugins/clearChart'
 import createAnnotations from '@/assets/js/chartPlugins/annotations'
+import checkRules from '@/assets/js/rulesForLastPoints'
 
 export default {
   extends: Bar,
@@ -37,7 +38,7 @@ export default {
 
       // if there is enough data
       this.renderChart({
-        labels: new Array(this.chartData.length).fill().map((x, i) => i),
+        labels: new Array(this.chartData.length).fill().map((x, i) => i + 1),
         datasets: [
           {
             type: 'scatter',
@@ -59,8 +60,8 @@ export default {
           xAxes: [{
             ticks: {
               beginAtZero: true,
-              min: this.chartData.length - 15,
-              max: this.chartData.length - 1,
+              min: this.chartData.length - 14,
+              max: this.chartData.length,
               stepSize: 0.4
             },
             scaleLabel: {
@@ -80,6 +81,8 @@ export default {
       })
       // e/o options
       // e/o if there is enough data
+
+      checkRules(this.$store)
     }
   },
   watch: {

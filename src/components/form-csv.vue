@@ -54,7 +54,6 @@ export default {
       const fileData = fs.readFileSync(this.path)
       const parsedData = this.parseCSV(fileData)
       this.$store.commit('updateData', parsedData)
-      console.log('add', this.$store.state.data)
       // e/o initial data
 
       this.watcher
@@ -62,7 +61,6 @@ export default {
         const fileData = fs.readFileSync(this.path)
         const parsedData = this.parseCSV(fileData)
         this.$store.commit('updateData', parsedData)
-        console.log('change', this.$store.state.data)
       })
       .on('error', error => {
         console.error('Error happened', error)
