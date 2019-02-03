@@ -5,6 +5,7 @@ import chartjsPluginAnnotation from "chartjs-plugin-annotation";
 import chartjsPluginZoom from "chartjs-plugin-zoom";
 import { round } from '@/assets/js/operationsHelpers'
 import showMessage from '@/assets/js/chartPlugins/message'
+import clearChart from '@/assets/js/chartPlugins/clearChart'
 import createAnnotations from '@/assets/js/chartPlugins/annotations'
 
 export default {
@@ -99,10 +100,14 @@ export default {
         // e.o zoom
       })
       // e/o options
+    },
+    clearChart () {
+
     }
   },
   watch: {
     chartData () {
+      clearChart(this)
       this.$data._chart.destroy()
       this.renderSpcChart()
     }

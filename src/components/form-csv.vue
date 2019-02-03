@@ -11,7 +11,7 @@
       class="button button--start"
       type="button"
       @click="startWatching"
-      v-text="'Start watching'"
+      v-text="watcher ? 'Watching...' : 'Start watching'"
     />
 
     <button
@@ -75,6 +75,7 @@ export default {
         console.log("You need to start first the watcher")
       } else {
         this.watcher.close()
+        this.watcher = null
         console.log("Nothing is being watched")
       }
     },
@@ -108,7 +109,7 @@ export default {
 
     background-color: #222;
     color: white;
-    font-size: 21px;
+    font-size: 19px;
 
     display: flex;
     flex-direction: column;

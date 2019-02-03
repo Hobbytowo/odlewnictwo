@@ -13,7 +13,6 @@
 <script>
 import _ from 'lodash'
 import formCsv from '@/components/form-csv'
-import clearData from '@/assets/js/clearData.js'
 import chart from '@/components/chart'
 import { makePoints } from '@/assets/js/operationsHelpers.js'
 
@@ -45,9 +44,6 @@ export default {
     }
   },
   methods: {
-    createChart () {
-      clearData()
-    },
     updateDate (data) {
       this.data = data
       console.log('data from app', data)

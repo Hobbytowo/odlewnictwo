@@ -15,7 +15,7 @@ export default function showMessage (that, message) {
       const textY = height / 2.3
 
       ctx.restore()
-      ctx.font = `${fontSize}em sans-serif`
+      ctx.font = `${fontSize}em 'Lato', sans-serif`
       ctx.textBaseline = 'middle'
       ctx.fillText(text, textX, textY)
       ctx.save()
