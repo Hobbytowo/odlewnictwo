@@ -48,13 +48,14 @@ export default {
   },
   methods: {
     renderSpcChart () {
-      if (!this.isEnoughData) { // if there is not enough data
+      // if there is not enough data
+      if (!this.isEnoughData) {
         showMessage(this, 'Not enough data to create chart')
-        this.renderChart({
-          labels: new Array(this.chartData.length).fill().map((x, i) => i)
-        }, { maintainAspectRatio: false })
+        this.renderChart({ labels: []}, { maintainAspectRatio: false })
+
         return
       }
+      // e/o if there is not enough data
 
       // if there is enough data
       this.renderChart({
@@ -100,9 +101,7 @@ export default {
         // e.o zoom
       })
       // e/o options
-    },
-    clearChart () {
-
+      // e/o if there is enough data
     }
   },
   watch: {
