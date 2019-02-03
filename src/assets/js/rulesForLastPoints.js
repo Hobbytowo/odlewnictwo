@@ -44,6 +44,36 @@ export default function checkRules (store) {
 
   // e.o rule 2
 
+  // rule 3 - Four out of five consecutive points fall beyond the 1σ-limit
+  const checkRule3 = () => {
+    const arrToTest = []
+    points.map((x, i) => i > points.length - 6 && arrToTest.push(x))
+
+    const checkUpper = arr => {
+      let missed = 0
+      arr.map(point => {
+        point > store.getters.value1SigmaUpper && missed++
+      })
+
+      return missed
+    }
+
+    const checkLower = arr => {
+      let missed = 0
+      arr.map(point => {
+        point < store.getters.value1SigmaLower && missed++
+      })
+
+      return missed
+    }
+
+    if (checkUpper(arrToTest) > 3 || checkLower(arrToTest) > 3) {
+      alert('Break rule 3')
+    }
+  }
+
+  // e.o rule 3
+
   // rule 4 - Nine consecutive points fall on the same side of the centerline (in zone C or beyond)
   const checkRule4 = () => {
     const arrToTest = []
@@ -60,6 +90,7 @@ export default function checkRules (store) {
   // invoke functions
   points.length > 0 && checkRule1()
   points.length > 2 && checkRule2()
+  points.length > 6 && checkRule3()
   points.length > 8 && checkRule4()
   // e/o invoke functions
 }
