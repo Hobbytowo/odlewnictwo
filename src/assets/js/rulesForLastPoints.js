@@ -87,10 +87,42 @@ export default function checkRules (store) {
   }
   // e.o rule 4
 
+  // rule 5 - Six consecutive points are steadil increasing or decreasing
+  const checkRule5 = () => {
+    const arrToTest = []
+    points.map((x, i) => i > points.length - 7 && arrToTest.push(x))
+
+    const checkIncreasing = arr => {
+      let increasing = 0
+      arr.map((point, idx) => {
+        if (idx !== 5 && point < arrToTest[idx + 1]) {
+          increasing++
+      }})
+
+      return increasing
+    }
+
+    const checkDecreasing = arr => {
+      let decreasing = 0
+      arr.map((point, idx) => {
+        if (idx !== 5 && point > arrToTest[idx + 1]) {
+          decreasing++
+      }})
+
+      return decreasing
+    }
+
+    if (checkIncreasing(arrToTest) === 5 || checkDecreasing(arrToTest) === 5) {
+      alert('Break rule 5')
+    }
+  }
+  // e.o rule 5
+
   // invoke functions
   points.length > 0 && checkRule1()
   points.length > 2 && checkRule2()
-  points.length > 6 && checkRule3()
+  points.length > 4 && checkRule3()
   points.length > 8 && checkRule4()
+  points.length > 5 && checkRule5()
   // e/o invoke functions
 }
