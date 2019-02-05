@@ -2,7 +2,9 @@
 // https://en.wikipedia.org/wiki/Western_Electric_rules
 
 export default function checkRules (store) {
-  const points = store.getters.pointsToTest
+  // const points = store.getters.pointsToTest
+  const points = [2,8,2,2,2,3,1,98,87,187,0,21,65,500,-0,12,57,74]
+  console.log(points.length)
 
   // rule 1 - Any single data point falls outside the 3σ-limit
   const checkRule1 = () => {
@@ -140,12 +142,30 @@ export default function checkRules (store) {
   }
   // e.o rule 6
 
+  // rule 7 -	15 consecutive points are within 1 sigma of the center line.
+  const checkRule7 = () => {
+    const arrToTest = points.slice(-15)
+
+    // const max = store.getters.value1SigmaUpper
+    // const min = store.getters.value1SigmaLower
+    const max = 500
+    const min = -5
+
+    const isStratification = arr => {
+      return arr.every(x => x >= min && x <= max)
+    }
+
+    isStratification(arrToTest) && alert('Break rule 7')
+  }
+  // e.o rule 7
+
   // invoke functions
-  points.length > 0 && checkRule1()
-  points.length > 2 && checkRule2()
-  points.length > 4 && checkRule3()
-  points.length > 8 && checkRule4()
-  points.length > 5 && checkRule5()
-  points.length > 13 && checkRule6()
+  // points.length > 0 && checkRule1() // outside 3sigma (1 points)
+  // points.length > 2 && checkRule2() // 2 out of 3
+  // points.length > 4 && checkRule3() // 4 out of 5
+  // points.length > 8 && checkRule4() // on the same side (9)
+  // points.length > 5 && checkRule5() // desc / asc (6)
+  // points.length > 13 && checkRule6() // alternating (14)
+  points.length > 14 && checkRule7() // stratification (15)
   // e/o invoke functions
 }
