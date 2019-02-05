@@ -16,10 +16,10 @@ export const store = new Vuex.Store({
       return makePoints(state.data, state.dataNumber)
     },
     pointsToCreateChart: (state, getters) => {
-      return [...getters.points].splice(0, state.pointsNumber)
+      return [...getters.points].slice(0, state.pointsNumber)
     },
     pointsToTest: (state, getters) => {
-      return [...getters.points].splice(state.pointsNumber)
+      return [...getters.points].slice(state.pointsNumber)
     },
     isEnoughData: state => {
       return ((state.dataNumber * state.pointsNumber) <= state.data.length)
