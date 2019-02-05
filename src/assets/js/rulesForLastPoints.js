@@ -146,10 +146,8 @@ export default function checkRules (store) {
   const checkRule7 = () => {
     const arrToTest = points.slice(-15)
 
-    // const max = store.getters.value1SigmaUpper
-    // const min = store.getters.value1SigmaLower
-    const max = 500
-    const min = -5
+    const max = store.getters.value1SigmaUpper
+    const min = store.getters.value1SigmaLower
 
     const isStratification = arr => {
       return arr.every(x => x >= min && x <= max)
@@ -159,6 +157,21 @@ export default function checkRules (store) {
   }
   // e.o rule 7
 
+  // rule 8 -	8 consecutive points on either side of the center line with not within 1 sigma.
+  const checkRule8 = () => {
+    const arrToTest = points.slice(-8)
+
+    const max = store.getters.value1SigmaUpper
+    const min = store.getters.value1SigmaLower
+
+    const isMixture = arr => {
+      return arr.every(x => x < min || x > max)
+    }
+
+    isMixture(arrToTest) && alert('Break rule 8')
+  }
+  // e.o rule 8
+
   // invoke functions
   // points.length > 0 && checkRule1() // outside 3sigma (1 points)
   // points.length > 2 && checkRule2() // 2 out of 3
@@ -166,6 +179,7 @@ export default function checkRules (store) {
   // points.length > 8 && checkRule4() // on the same side (9)
   // points.length > 5 && checkRule5() // desc / asc (6)
   // points.length > 13 && checkRule6() // alternating (14)
-  points.length > 14 && checkRule7() // stratification (15)
+  // points.length > 14 && checkRule7() // stratification (15)
+  points.length > 7 && checkRule8() // stratification (15)
   // e/o invoke functions
 }
