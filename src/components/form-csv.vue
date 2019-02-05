@@ -11,7 +11,7 @@
       class="button button--start"
       type="button"
       @click="startWatching"
-      v-text="'Start watching'"
+      v-text="watcher ? 'Watching...' : 'Start watching'"
     />
 
     <button
@@ -30,7 +30,6 @@ import fs from 'fs'
 export default {
   data () {
     return {
-      data: [],
       watcher: null,
       path: ''
     }
@@ -39,9 +38,7 @@ export default {
     selectFile () {
       const { dialog } = require('electron').remote
 
-      dialog.showOpenDialog({
-        properties: ['openFile']
-      }, path => {
+      dialog.showOpenDialog({ properties: ['openFile']}, path => {
         path
           ? this.path = path[0]
           : console.log("No file selected")
@@ -55,16 +52,15 @@ export default {
 
       // initial data
       const fileData = fs.readFileSync(this.path)
-      this.data = this.parseCSV(fileData)
-      this.$emit('onUpdateDate', this.data)
-      console.log(this.path, 'watchiiing')
+      const parsedData = this.parseCSV(fileData)
+      this.$store.commit('updateData', parsedData)
       // e/o initial data
 
       this.watcher
       .on('change', () => {
         const fileData = fs.readFileSync(this.path)
-        this.data = this.parseCSV(fileData)
-        this.$emit('onUpdateDate', this.data)
+        const parsedData = this.parseCSV(fileData)
+        this.$store.commit('updateData', parsedData)
       })
       .on('error', error => {
         console.error('Error happened', error)
@@ -75,6 +71,7 @@ export default {
         console.log("You need to start first the watcher")
       } else {
         this.watcher.close()
+        this.watcher = null
         console.log("Nothing is being watched")
       }
     },
@@ -108,7 +105,7 @@ export default {
 
     background-color: #222;
     color: white;
-    font-size: 21px;
+    font-size: 19px;
 
     display: flex;
     flex-direction: column;

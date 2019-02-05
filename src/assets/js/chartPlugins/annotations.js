@@ -1,4 +1,4 @@
-export default function createAnnotations (centerValue, valueUCL, valueLCL, sigma) {
+export default function createAnnotations (getters) {
   return {
     annotations: [
       {
@@ -8,7 +8,7 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "line",
         mode: "horizontal",
         scaleID: "y-axis-0",
-        value: centerValue,
+        value: getters.centerValue,
         borderColor: "black",
         borderWidth: 3,
         label: {
@@ -25,7 +25,7 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "line",
         mode: "horizontal",
         scaleID: "y-axis-0",
-        value: valueUCL,
+        value: getters.valueUCL,
         borderColor: "black",
         borderWidth: 3,
         label: {
@@ -42,7 +42,7 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "line",
         mode: "horizontal",
         scaleID: "y-axis-0",
-        value: valueLCL,
+        value: getters.valueLCL,
         borderColor: "black",
         borderWidth: 3,
         label: {
@@ -61,8 +61,8 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "box",
         xScaleID: "x-axis-0",
         yScaleID: "y-axis-0",
-        yMin: valueUCL,
-        yMax: valueUCL - sigma,
+        yMin: getters.valueUCL,
+        yMax: getters.value2SigmaUpper,
         backgroundColor: "rgba(180, 0, 0, 0.2)",
         borderWidth: 0
       }, // e/o upper area
@@ -71,8 +71,8 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "box",
         xScaleID: "x-axis-0",
         yScaleID: "y-axis-0",
-        yMin: valueLCL,
-        yMax: valueLCL + sigma,
+        yMin: getters.valueLCL,
+        yMax: getters.value2SigmaLower,
         backgroundColor: "rgba(180, 0, 0, 0.2)",
         borderWidth: 0
       }, // e/o lower area
@@ -85,8 +85,8 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "box",
         xScaleID: "x-axis-0",
         yScaleID: "y-axis-0",
-        yMax: valueUCL - sigma,
-        yMin: centerValue + sigma,
+        yMax: getters.value2SigmaUpper,
+        yMin: getters.value1SigmaUpper,
         backgroundColor: "rgb(255, 170, 60, 0.2)",
         borderWidth: 0
       }, // e/o upper area
@@ -95,8 +95,8 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "box",
         xScaleID: "x-axis-0",
         yScaleID: "y-axis-0",
-        yMin: valueLCL + sigma,
-        yMax: centerValue + sigma,
+        yMin: getters.value2SigmaLower,
+        yMax: getters.value1SigmaLower,
         backgroundColor: "rgba(255, 170, 60, 0.2)",
         borderWidth: 0
       }, // e/o lower area
@@ -109,8 +109,8 @@ export default function createAnnotations (centerValue, valueUCL, valueLCL, sigm
         type: "box",
         xScaleID: "x-axis-0",
         yScaleID: "y-axis-0",
-        yMin: centerValue + sigma,
-        yMax: centerValue - sigma,
+        yMin: getters.value1SigmaUpper,
+        yMax: getters.value1SigmaLower,
         backgroundColor: "rgb(146, 244, 66, 0.2)",
         borderWidth: 0
       }
