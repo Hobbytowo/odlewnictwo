@@ -8,30 +8,38 @@
     />
 
     <button
+      :class="{ 'button--disable': !path }"
       class="button button--start"
       type="button"
       @click="startWatching"
-      v-text="watcher ? 'Watching...' : 'Start watching'"
+      v-text="watcher ? 'Stop watching' : 'Start watching'"
     />
 
     <button
-      class="button button--stop"
+      class="button button--settings"
       type="button"
-      @click="stopWatching"
-      v-text="'Stop watching'"
+      @click="openSettings"
+      v-text="'Settings'"
     />
+
+    <modal v-if="showSettings" @close="showSettings = false"/>
   </div>
 </template>
 
 <script>
+import Modal from './settings'
 import chokidar from 'chokidar'
 import fs from 'fs'
 
 export default {
+  components: {
+    Modal
+  },
   data () {
     return {
       watcher: null,
       path: '',
+      showSettings: false
     }
   },
   methods: {
@@ -45,6 +53,8 @@ export default {
       })
     },
     startWatching () {
+      if(!this.path) return
+
       this.watcher = chokidar.watch(this.path, {
         ignored: /[\/\\]\./,
         persistent: true
@@ -66,12 +76,6 @@ export default {
         console.error('Error happened', error)
       })
     },
-    stopWatching () {
-      if (!this.watcher) return
-
-      this.watcher.close()
-      this.watcher = null
-    },
     parseCSV (csv) {
       return csv.toString().split('\n')
         .map(data => data.replace('\r', ''))
@@ -89,6 +93,9 @@ export default {
           alert("An error ocurred creating the file "+ err.message)
         }
       })
+    },
+    openSettings () {
+      this.showSettings = true
     }
   }
 }
@@ -126,6 +133,16 @@ export default {
 
     &:hover {
       background-color: #555;
+    }
+
+    &--disable {
+      opacity: 0.5;
+      cursor: context-menu;
+
+      &:hover {
+        opacity: 0.5;
+        background-color: #222;
+      }
     }
   }
 </style>
