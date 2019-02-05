@@ -6,10 +6,15 @@ import chartjsPluginZoom from "chartjs-plugin-zoom";
 import showMessage from '@/assets/js/chartPlugins/message'
 import clearChart from '@/assets/js/chartPlugins/clearChart'
 import createAnnotations from '@/assets/js/chartPlugins/annotations'
-import checkRules from '@/assets/js/rulesForLastPoints'
+import checkRulesForLastPoints from '@/assets/js/rulesForLastPoints'
 
 export default {
   extends: Bar,
+  data () {
+    return {
+      breakRules: []
+    }
+  },
   computed: {
     chartData () {
       return this.$store.getters.pointsToTest
@@ -82,7 +87,16 @@ export default {
       // e/o options
       // e/o if there is enough data
 
-      checkRules(this.$store)
+      this.checkRules()
+    },
+    checkRules () {
+      this.breakRules = checkRulesForLastPoints(this.$store)
+
+      if (!this.breakRules) return // no break rules
+      else this.clearData()
+    },
+    clearData () {
+      console.log('clear', this.breakRules)
     }
   },
   watch: {

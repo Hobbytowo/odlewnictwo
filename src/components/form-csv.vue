@@ -31,7 +31,7 @@ export default {
   data () {
     return {
       watcher: null,
-      path: ''
+      path: '',
     }
   },
   methods: {
@@ -67,19 +67,28 @@ export default {
       })
     },
     stopWatching () {
-      if (!this.watcher) {
-        console.log("You need to start first the watcher")
-      } else {
-        this.watcher.close()
-        this.watcher = null
-        console.log("Nothing is being watched")
-      }
+      if (!this.watcher) return
+
+      this.watcher.close()
+      this.watcher = null
     },
     parseCSV (csv) {
       return csv.toString().split('\n')
         .map(data => data.replace('\r', ''))
         .filter(data => data)
         .map(data => data.replace(',', '.') * 1)
+    },
+    clearData () {
+      this.watcher.close()
+      this.watcher = null
+      this.clearCSVFIle()
+    },
+    clearCSVFile () {
+      fs.writeFile(this.path, '', err => {
+        if (err) {
+          alert("An error ocurred creating the file "+ err.message)
+        }
+      })
     }
   }
 }
