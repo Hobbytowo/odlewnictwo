@@ -2,7 +2,7 @@
   <transition name="modal">
      <div class="modal-mask">
        <div class="modal-wrapper">
-         <div class="modal-container">
+         <form class="modal-container">
 
            <div class="modal-header header">
              <h3 class="title title--main">Settings</h3>
@@ -13,7 +13,14 @@
              <div class="setting-wrapper">
                <div class="setting">
                   <label for="window" class="label label--window">Window width:</label>
-                  <input type="number" class="input input--window" min="1" value="">
+                  <input
+                    ref="windowInput"
+                    v-model="windowWidth"
+                    type="number"
+                    class="input input--window"
+                    min="1"
+                    required
+                  >
                </div>
              </div>
              <!--e/o window width -->
@@ -30,7 +37,12 @@
                  class="rules rules-wrapper"
                >
                  <div class="setting">
-                   <input type="checkbox" :id="`rule${rule.idx}`" value="">
+                   <input
+                     type="checkbox"
+                     :id="`rule${rule.idx}`"
+                     :checked="rule.checked"
+                     class="checkbox"
+                   >
 
                    <label :for="`rule${rule.idx}`" class="label" v-text="rule.name"/>
 
@@ -46,7 +58,7 @@
                OK
              </button>
            </div>
-         </div>
+         </form>
        </div>
      </div>
    </transition>
@@ -61,13 +73,16 @@ export default {
   },
   data () {
     return {
-      showModal: false
+      showModal: false,
+      windowWidth: 15
     }
   },
   methods: {
     submitForm () {
       this.$emit('close')
       this.showModal = false
+
+      this.windowWidth =
       // this.$store.commit('updateData', parsedData)
     }
   }
@@ -91,7 +106,7 @@ export default {
 }
 
 .modal-container {
-  min-width: 30vw;
+  min-width: 300px;
   max-width: 70vw;
   padding: 20px 30px;
   background-color: #ddd;
@@ -135,6 +150,10 @@ export default {
   width: 50px;
   padding: 4px;
   border-radius: 5px;
+}
+
+.checkbox {
+  cursor: pointer;
 }
 
 .button {

@@ -30,7 +30,7 @@ export default {
     position: relative;
 
     opacity: 0.6;
-    transition: opacity 0.2s;
+    transition: opacity 0.3s;
 
     &:hover, &:hover .tooltip-wrapper {
       opacity: 1;
@@ -58,7 +58,7 @@ export default {
     background-color: #42b983;
 
     pointer-events: none;
-    transition: opacity 0.2s;
+    transition: opacity 0.3s;
     opacity: 0;
   }
 
