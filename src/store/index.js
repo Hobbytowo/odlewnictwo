@@ -9,7 +9,7 @@ export const store = new Vuex.Store({
     data: [],
     dataNumber: 5,
     pointsNumber: 6,
-    winowWidth: 15,
+    windowWidth: 15,
     rules: [
       {
         idx: 1,
@@ -112,7 +112,7 @@ export const store = new Vuex.Store({
       state.rules = rules
     },
     updateWindowWidth: (state, width) => {
-      state.winowWidth = width
+      state.windowWidth = width
     }
   }
 })

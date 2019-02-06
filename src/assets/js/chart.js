@@ -65,7 +65,7 @@ export default {
           xAxes: [{
             ticks: {
               beginAtZero: true,
-              min: this.chartData.length - 14,
+              min: this.chartData.length - this.$store.state.windowWidth - 1,
               max: this.chartData.length,
               stepSize: 0.4
             },
