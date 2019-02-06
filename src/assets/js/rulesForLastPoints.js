@@ -10,7 +10,7 @@ export default function checkRules (store) {
     const point = points.slice(-1)
     if (point > store.getters.valueUCL
      || point < store.getters.valueLCL) {
-      breakRules.push('Break rule 1')
+      breakRules.push('1')
     }
   }
   // e.o rule 1
@@ -38,7 +38,7 @@ export default function checkRules (store) {
     }
 
     if (checkUpper(arrToTest) > 1 || checkLower(arrToTest) > 1) {
-      breakRules.push('Break rule 2')
+      breakRules.push('2')
     }
   }
 
@@ -67,7 +67,7 @@ export default function checkRules (store) {
     }
 
     if (checkUpper(arrToTest) > 3 || checkLower(arrToTest) > 3) {
-      breakRules.push('Break rule 3')
+      breakRules.push('3')
     }
   }
 
@@ -80,7 +80,7 @@ export default function checkRules (store) {
 
     if (arrToTest.every(point => point > center)
      || arrToTest.every(point => point < center)) {
-      breakRules.push('Break rule 4')
+      breakRules.push('4')
     }
   }
   // e.o rule 4
@@ -110,7 +110,7 @@ export default function checkRules (store) {
     }
 
     if (checkIncreasing(arrToTest) === 5 || checkDecreasing(arrToTest) === 5) {
-      breakRules.push('Break rule 5')
+      breakRules.push('5')
     }
   }
   // e.o rule 5
@@ -136,7 +136,7 @@ export default function checkRules (store) {
 
     if ((firstTrueValuesTrue.length === 7 && firstTrueValuesFalse.length === 6)
     || (firstTrueValuesTrue.length === 0 && firstTrueValuesFalse.length === 0)) {
-      breakRules.push('Break rule 6')
+      breakRules.push('6')
     }
   }
   // e.o rule 6
@@ -152,7 +152,7 @@ export default function checkRules (store) {
       return arr.every(x => x >= min && x <= max)
     }
 
-    isStratification(arrToTest) && breakRules.push('Break rule 7')
+    isStratification(arrToTest) && breakRules.push('7')
   }
   // e.o rule 7
 
@@ -167,20 +167,21 @@ export default function checkRules (store) {
       return arr.every(x => x < min || x > max)
     }
 
-    isMixture(arrToTest) && breakRules.push('Break rule 8')
+    isMixture(arrToTest) && breakRules.push('8')
   }
   // e.o rule 8
 
   // invoke functions
-  points.length > 0 && checkRule1() // outside 3sigma (1 points)
-  points.length > 2 && checkRule2() // 2 out of 3
-  points.length > 4 && checkRule3() // 4 out of 5
-  points.length > 8 && checkRule4() // on the same side (9)
-  points.length > 5 && checkRule5() // desc / asc (6)
-  points.length > 13 && checkRule6() // alternating (14)
-  points.length > 14 && checkRule7() // stratification (15)
-  points.length > 7 && checkRule8() // mixture (8)
+  const pointsLength = points.length
+  pointsLength > 0 && checkRule1() // outside 3sigma (1 points)
+  pointsLength > 2 && checkRule2() // 2 out of 3
+  pointsLength > 4 && checkRule3() // 4 out of 5
+  pointsLength > 8 && checkRule4() // on the same side (9)
+  pointsLength > 5 && checkRule5() // desc / asc (6)
+  pointsLength > 13 && checkRule6() // alternating (14)
+  pointsLength > 14 && checkRule7() // stratification (15)
+  pointsLength > 7 && checkRule8() // mixture (8)
   // e/o invoke functions
 
-  alert(breakRules)
+  return breakRules
 }

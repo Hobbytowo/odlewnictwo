@@ -4,34 +4,42 @@
       class="button button--select"
       type="button"
       @click="selectFile"
-      v-text="'Select file'"
+      v-text="this.path ? 'Change path' : 'Select file'"
     />
 
     <button
+      :class="{ 'button--disable': !path }"
       class="button button--start"
       type="button"
       @click="startWatching"
-      v-text="watcher ? 'Watching...' : 'Start watching'"
+      v-text="watcher ? 'Stop watching' : 'Start watching'"
     />
 
     <button
-      class="button button--stop"
+      class="button button--settings"
       type="button"
-      @click="stopWatching"
-      v-text="'Stop watching'"
+      @click="openSettings"
+      v-text="'Settings'"
     />
+
+    <modal v-if="showSettings" @close="showSettings = false"/>
   </div>
 </template>
 
 <script>
+import Modal from './settings'
 import chokidar from 'chokidar'
 import fs from 'fs'
 
 export default {
+  components: {
+    Modal
+  },
   data () {
     return {
       watcher: null,
-      path: ''
+      path: '',
+      showSettings: false
     }
   },
   methods: {
@@ -45,6 +53,8 @@ export default {
       })
     },
     startWatching () {
+      if(!this.path) return
+
       this.watcher = chokidar.watch(this.path, {
         ignored: /[\/\\]\./,
         persistent: true
@@ -66,20 +76,26 @@ export default {
         console.error('Error happened', error)
       })
     },
-    stopWatching () {
-      if (!this.watcher) {
-        console.log("You need to start first the watcher")
-      } else {
-        this.watcher.close()
-        this.watcher = null
-        console.log("Nothing is being watched")
-      }
-    },
     parseCSV (csv) {
       return csv.toString().split('\n')
         .map(data => data.replace('\r', ''))
         .filter(data => data)
         .map(data => data.replace(',', '.') * 1)
+    },
+    clearData () {
+      this.watcher.close()
+      this.watcher = null
+      this.clearCSVFIle()
+    },
+    clearCSVFile () {
+      fs.writeFile(this.path, '', err => {
+        if (err) {
+          alert("An error ocurred creating the file "+ err.message)
+        }
+      })
+    },
+    openSettings () {
+      this.showSettings = true
     }
   }
 }
@@ -117,6 +133,16 @@ export default {
 
     &:hover {
       background-color: #555;
+    }
+
+    &--disable {
+      opacity: 0.5;
+      cursor: context-menu;
+
+      &:hover {
+        opacity: 0.5;
+        background-color: #222;
+      }
     }
   }
 </style>
