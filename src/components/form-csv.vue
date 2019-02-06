@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="buttons">
-    <div class="row">
       <button
         class="button button--select"
         type="button"
@@ -14,7 +13,6 @@
         @click="openSettings"
         v-text="'Settings'"
       />
-    </div>
 
     <button
       :class="{ 'button--disable': !path }"
@@ -23,8 +21,6 @@
       @click="startWatching"
       v-text="watcher ? 'Stop watching' : 'Start watching'"
     />
-
-
 
     <modal v-if="showSettings" @close="showSettings = false"/>
   </div>
@@ -110,25 +106,16 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    flex-direction: column;
 
     padding: 0 50px;
   }
 
-  .row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-  }
-
   .button {
-    width: 100px;
     height: 60px;
     border-radius: 30px;
     border: 2px solid white;
     cursor: pointer;
-    padding: 10px;
+    padding: 10px 20px;
     margin: 15px;
 
     background-color: #222;
@@ -153,7 +140,10 @@ export default {
       border-radius: 35px;
       font-size: 19px;
       border: 3px solid white;
-      margin-top: 0;
+    }
+
+    &--settings {
+      order: 1;
     }
 
     &--disable {

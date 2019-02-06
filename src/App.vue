@@ -6,10 +6,8 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import formCsv from '@/components/form-csv'
 import chart from '@/components/chart'
-import { store } from './store/index.js'
 
 export default {
   name: 'app',

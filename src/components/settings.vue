@@ -15,10 +15,10 @@
                   <label for="window" class="label label--window">Window width:</label>
                   <input
                     ref="windowInput"
-                    v-model="windowWidth"
                     type="number"
                     class="input input--window"
                     min="1"
+                    :value="$store.state.windowWidth"
                     required
                   >
                </div>
@@ -54,7 +54,7 @@
            </div>
 
            <div class="modal-footer footer">
-             <button class="modal-button button" @click="submitForm">
+             <button class="modal-button button" @click.prevent="submitForm">
                OK
              </button>
            </div>
@@ -73,8 +73,7 @@ export default {
   },
   data () {
     return {
-      showModal: false,
-      windowWidth: 15
+      showModal: false
     }
   },
   methods: {
@@ -82,9 +81,8 @@ export default {
       this.$emit('close')
       this.showModal = false
 
-      this.windowWidth = this.$refs.windowInput.value
-      this.$store.commit('updateWindowWidth', this.windowWidth)
-      // this.$store.commit('updateData', parsedData)
+      this.$store.commit('updateWindowWidth', this.$refs.windowInput.value)
+      // this.$store.commit('updateSelectedRules', parsedData)
     }
   }
 }

@@ -19,6 +19,9 @@ export default {
     chartData () {
       return this.$store.getters.pointsToTest
     },
+    windowWidth () {
+      return this.$store.state.windowWidth
+    },
     pointsColors () {
       return this.chartData.map(x => {
         return (x > this.$store.getters.valueUCL || x < this.$store.getters.valueLCL)
@@ -65,7 +68,7 @@ export default {
           xAxes: [{
             ticks: {
               beginAtZero: true,
-              min: this.chartData.length - this.$store.state.windowWidth - 1,
+              min: this.chartData.length - this.windowWidth - 1,
               max: this.chartData.length,
               stepSize: 0.4
             },
@@ -91,9 +94,7 @@ export default {
     },
     checkRules () {
       this.breakRules = checkRulesForLastPoints(this.$store)
-
-      if (!this.breakRules) return // no break rules
-      else this.clearData()
+      this.breakRules.length && this.clearData()
     },
     clearData () {
       console.log('clear', this.breakRules)
@@ -101,6 +102,11 @@ export default {
   },
   watch: {
     chartData () {
+      clearChart(this)
+      this.$data._chart.destroy()
+      this.renderSpcChart()
+    },
+    windowWidth () {
       clearChart(this)
       this.$data._chart.destroy()
       this.renderSpcChart()
