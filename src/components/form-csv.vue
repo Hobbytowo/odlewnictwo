@@ -4,7 +4,7 @@
       class="button button--select"
       type="button"
       @click="selectFile"
-      v-text="'Select file'"
+      v-text="this.path ? 'Change path' : 'Select file'"
     />
 
     <button
