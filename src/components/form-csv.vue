@@ -1,11 +1,20 @@
 <template lang="html">
   <div class="buttons">
-    <button
-      class="button button--select"
-      type="button"
-      @click="selectFile"
-      v-text="this.path ? 'Change path' : 'Select file'"
-    />
+    <div class="row">
+      <button
+        class="button button--select"
+        type="button"
+        @click="selectFile"
+        v-text="this.path ? 'Change path' : 'Select file'"
+      />
+
+      <button
+        class="button button--settings"
+        type="button"
+        @click="openSettings"
+        v-text="'Settings'"
+      />
+    </div>
 
     <button
       :class="{ 'button--disable': !path }"
@@ -15,12 +24,7 @@
       v-text="watcher ? 'Stop watching' : 'Start watching'"
     />
 
-    <button
-      class="button button--settings"
-      type="button"
-      @click="openSettings"
-      v-text="'Settings'"
-    />
+
 
     <modal v-if="showSettings" @close="showSettings = false"/>
   </div>
@@ -106,22 +110,30 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
+    flex-direction: column;
 
     padding: 0 50px;
   }
 
+  .row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+  }
+
   .button {
-    width: 160px;
-    height: 70px;
-    border-radius: 35px;
-    border: 3px solid white;
+    width: 100px;
+    height: 60px;
+    border-radius: 30px;
+    border: 2px solid white;
     cursor: pointer;
     padding: 10px;
-    margin: 15px 0;
+    margin: 15px;
 
     background-color: #222;
     color: white;
-    font-size: 19px;
+    font-size: 17px;
 
     display: flex;
     flex-direction: column;
@@ -133,6 +145,15 @@ export default {
 
     &:hover {
       background-color: #555;
+    }
+
+    &--start {
+      width: 160px;
+      height: 70px;
+      border-radius: 35px;
+      font-size: 19px;
+      border: 3px solid white;
+      margin-top: 0;
     }
 
     &--disable {

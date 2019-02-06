@@ -83,7 +83,6 @@ export default {
       this.showModal = false
 
       this.windowWidth = this.$refs.windowInput.value
-      console.log(this.windowWidth)
       this.$store.commit('updateWindowWidth', this.windowWidth)
       // this.$store.commit('updateData', parsedData)
     }
