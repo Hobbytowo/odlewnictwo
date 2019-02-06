@@ -98,18 +98,19 @@ export default {
     },
     clearData () {
       console.log('clear', this.breakRules)
+    },
+    rerender () {
+        clearChart(this)
+        this.$data._chart.destroy()
+        this.renderSpcChart()
     }
   },
   watch: {
     chartData () {
-      clearChart(this)
-      this.$data._chart.destroy()
-      this.renderSpcChart()
+      this.rerender()
     },
     windowWidth () {
-      clearChart(this)
-      this.$data._chart.destroy()
-      this.renderSpcChart()
+      this.rerender()
     }
   }
 }
