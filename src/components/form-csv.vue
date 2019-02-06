@@ -4,50 +4,57 @@
       class="button button--select"
       type="button"
       @click="selectFile"
-      v-text="'Select file'"
+      v-text="this.path ? 'Change path' : 'Select file'"
     />
 
     <button
+      :class="{ 'button--disable': !path }"
       class="button button--start"
       type="button"
       @click="startWatching"
-      v-text="'Start watching'"
+      v-text="watcher ? 'Stop watching' : 'Start watching'"
     />
 
     <button
-      class="button button--stop"
+      class="button button--settings"
       type="button"
-      @click="stopWatching"
-      v-text="'Stop watching'"
+      @click="openSettings"
+      v-text="'Settings'"
     />
+
+    <modal v-if="showSettings" @close="showSettings = false"/>
   </div>
 </template>
 
 <script>
+import Modal from './settings'
 import chokidar from 'chokidar'
 import fs from 'fs'
 
 export default {
+  components: {
+    Modal
+  },
   data () {
     return {
-      data: [],
       watcher: null,
-      path: ''
+      path: '',
+      showSettings: false
     }
   },
   methods: {
     selectFile () {
       const { dialog } = require('electron').remote
 
-      dialog.showOpenDialog({
-        properties: ['openFile']
-      }, path => {
+      dialog.showOpenDialog({ properties: ['openFile']}, path => {
         path
           ? this.path = path[0]
           : console.log("No file selected")
       })
     },
     startWatching () {
+      if(!this.path) return
+
       this.watcher = chokidar.watch(this.path, {
         ignored: /[\/\\]\./,
         persistent: true
@@ -55,34 +62,40 @@ export default {
 
       // initial data
       const fileData = fs.readFileSync(this.path)
-      this.data = this.parseCSV(fileData)
-      this.$emit('onUpdateDate', this.data)
-      console.log(this.path, 'watchiiing')
+      const parsedData = this.parseCSV(fileData)
+      this.$store.commit('updateData', parsedData)
       // e/o initial data
 
       this.watcher
       .on('change', () => {
         const fileData = fs.readFileSync(this.path)
-        this.data = this.parseCSV(fileData)
-        this.$emit('onUpdateDate', this.data)
+        const parsedData = this.parseCSV(fileData)
+        this.$store.commit('updateData', parsedData)
       })
       .on('error', error => {
         console.error('Error happened', error)
       })
-    },
-    stopWatching () {
-      if (!this.watcher) {
-        console.log("You need to start first the watcher")
-      } else {
-        this.watcher.close()
-        console.log("Nothing is being watched")
-      }
     },
     parseCSV (csv) {
       return csv.toString().split('\n')
         .map(data => data.replace('\r', ''))
         .filter(data => data)
         .map(data => data.replace(',', '.') * 1)
+    },
+    clearData () {
+      this.watcher.close()
+      this.watcher = null
+      this.clearCSVFIle()
+    },
+    clearCSVFile () {
+      fs.writeFile(this.path, '', err => {
+        if (err) {
+          alert("An error ocurred creating the file "+ err.message)
+        }
+      })
+    },
+    openSettings () {
+      this.showSettings = true
     }
   }
 }
@@ -108,7 +121,7 @@ export default {
 
     background-color: #222;
     color: white;
-    font-size: 21px;
+    font-size: 19px;
 
     display: flex;
     flex-direction: column;
@@ -120,6 +133,16 @@ export default {
 
     &:hover {
       background-color: #555;
+    }
+
+    &--disable {
+      opacity: 0.5;
+      cursor: context-menu;
+
+      &:hover {
+        opacity: 0.5;
+        background-color: #222;
+      }
     }
   }
 </style>
