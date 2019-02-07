@@ -39,6 +39,7 @@
                  <div class="setting">
                    <input
                      type="checkbox"
+                     :ref="`rule${rule.idx}`"
                      :id="`rule${rule.idx}`"
                      :checked="rule.checked"
                      class="checkbox"
@@ -81,8 +82,22 @@ export default {
       this.$emit('close')
       this.showModal = false
 
+      const updatedRules = []
+
+
+      this.$store.state.rules.forEach(rule => {
+        const checked = this.$refs[`rule${rule.idx}`][0].checked
+
+        updatedRules.push({
+          idx: rule.idx,
+          name: rule.name,
+          description: rule.description,
+          checked
+        })
+      })
+
       this.$store.commit('updateWindowWidth', this.$refs.windowInput.value)
-      // this.$store.commit('updateSelectedRules', parsedData)
+      this.$store.commit('updateSelectedRules', updatedRules)
     }
   }
 }
