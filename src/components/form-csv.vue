@@ -1,25 +1,25 @@
 <template lang="html">
   <div class="buttons">
-      <button
-        class="button button--select"
-        type="button"
-        @click="selectFile"
-        v-text="this.path ? 'Change path' : 'Select file'"
-      />
-
-      <button
-        class="button button--settings"
-        type="button"
-        @click="openSettings"
-        v-text="'Settings'"
-      />
+    <button
+       class="button button--select"
+       type="button"
+       @click="selectFile"
+       v-text="this.path ? 'File selected' : 'Select file'"
+    />
 
     <button
       :class="{ 'button--disable': !path }"
       class="button button--start"
       type="button"
       @click="startWatching"
-      v-text="watcher ? 'Stop watching' : 'Start watching'"
+      v-text="(watcher && this.path) ? 'Watching...' : 'Start watching'"
+    />
+
+    <button
+      class="button button--settings"
+      type="button"
+      @click="openSettings"
+      v-text="'Settings'"
     />
 
     <modal v-if="showSettings" @close="showSettings = false"/>
@@ -42,6 +42,14 @@ export default {
       showSettings: false
     }
   },
+  computed: {
+    brokenRules () {
+      return this.$store.state.brokenRules
+    },
+    message () {
+      return `Broken rules: ${[...this.brokenRules]}.`
+    }
+  },
   methods: {
     selectFile () {
       const { dialog } = require('electron').remote
@@ -61,20 +69,25 @@ export default {
       })
 
       // initial data
-      const fileData = fs.readFileSync(this.path)
-      const parsedData = this.parseCSV(fileData)
-      this.$store.commit('updateData', parsedData)
+      this.$store.commit('updateRulesStatus', [])
+      // this.clearCSVFile() todo
+      this.startProcess()
       // e/o initial data
 
       this.watcher
       .on('change', () => {
-        const fileData = fs.readFileSync(this.path)
-        const parsedData = this.parseCSV(fileData)
-        this.$store.commit('updateData', parsedData)
+        this.startProcess()
       })
       .on('error', error => {
         console.error('Error happened', error)
       })
+    },
+    startProcess () {
+      const fileData = fs.readFileSync(this.path)
+      const parsedData = this.parseCSV(fileData)
+      this.$store.commit('updateData', parsedData)
+
+      this.brokenRules.length && this.stopProcess()
     },
     parseCSV (csv) {
       return csv.toString().split('\n')
@@ -82,10 +95,10 @@ export default {
         .filter(data => data)
         .map(data => data.replace(',', '.') * 1)
     },
-    clearData () {
-      this.watcher.close()
+    stopProcess () {
+      if (this.watcher !== null) this.watcher.close();
       this.watcher = null
-      this.clearCSVFIle()
+      alert(this.message)
     },
     clearCSVFile () {
       fs.writeFile(this.path, '', err => {
@@ -139,6 +152,7 @@ export default {
       height: 70px;
       border-radius: 35px;
       font-size: 19px;
+      line-height: 25px;
       border: 3px solid white;
     }
 

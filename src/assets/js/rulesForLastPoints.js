@@ -3,14 +3,15 @@
 
 export default function checkRules (store) {
   const points = store.getters.pointsToTest
-  const breakRules = []
+  const rules = store.state.rules
+  const brokenRules = []
 
   // rule 1 - Any single data point falls outside the 3σ-limit
   const checkRule1 = () => {
     const point = points.slice(-1)
     if (point > store.getters.valueUCL
      || point < store.getters.valueLCL) {
-      breakRules.push('1')
+      brokenRules.push('1')
     }
   }
   // e.o rule 1
@@ -38,7 +39,7 @@ export default function checkRules (store) {
     }
 
     if (checkUpper(arrToTest) > 1 || checkLower(arrToTest) > 1) {
-      breakRules.push('2')
+      brokenRules.push('2')
     }
   }
 
@@ -67,7 +68,7 @@ export default function checkRules (store) {
     }
 
     if (checkUpper(arrToTest) > 3 || checkLower(arrToTest) > 3) {
-      breakRules.push('3')
+      brokenRules.push('3')
     }
   }
 
@@ -80,7 +81,7 @@ export default function checkRules (store) {
 
     if (arrToTest.every(point => point > center)
      || arrToTest.every(point => point < center)) {
-      breakRules.push('4')
+      brokenRules.push('4')
     }
   }
   // e.o rule 4
@@ -110,7 +111,7 @@ export default function checkRules (store) {
     }
 
     if (checkIncreasing(arrToTest) === 5 || checkDecreasing(arrToTest) === 5) {
-      breakRules.push('5')
+      brokenRules.push('5')
     }
   }
   // e.o rule 5
@@ -136,7 +137,7 @@ export default function checkRules (store) {
 
     if ((firstTrueValuesTrue.length === 7 && firstTrueValuesFalse.length === 6)
     || (firstTrueValuesTrue.length === 0 && firstTrueValuesFalse.length === 0)) {
-      breakRules.push('6')
+      brokenRules.push('6')
     }
   }
   // e.o rule 6
@@ -152,7 +153,7 @@ export default function checkRules (store) {
       return arr.every(x => x >= min && x <= max)
     }
 
-    isStratification(arrToTest) && breakRules.push('7')
+    isStratification(arrToTest) && brokenRules.push('7')
   }
   // e.o rule 7
 
@@ -167,21 +168,22 @@ export default function checkRules (store) {
       return arr.every(x => x < min || x > max)
     }
 
-    isMixture(arrToTest) && breakRules.push('8')
+    isMixture(arrToTest) && brokenRules.push('8')
   }
   // e.o rule 8
 
   // invoke functions
   const pointsLength = points.length
-  pointsLength > 0 && checkRule1() // outside 3sigma (1 points)
-  pointsLength > 2 && checkRule2() // 2 out of 3
-  pointsLength > 4 && checkRule3() // 4 out of 5
-  pointsLength > 8 && checkRule4() // on the same side (9)
-  pointsLength > 5 && checkRule5() // desc / asc (6)
-  pointsLength > 13 && checkRule6() // alternating (14)
-  pointsLength > 14 && checkRule7() // stratification (15)
-  pointsLength > 7 && checkRule8() // mixture (8)
+
+  if (pointsLength > 0 && rules[0].checked) checkRule1() // outside 3sigma (1 points)
+  if (pointsLength > 2 && rules[1].checked) checkRule2() // 2 out of 3
+  if (pointsLength > 4 && rules[2].checked) checkRule3() // 4 out of 5
+  if (pointsLength > 8 && rules[3].checked) checkRule4() // on the same side (9)
+  if (pointsLength > 5 && rules[4].checked) checkRule5() // desc / asc (6)
+  if (pointsLength > 13 && rules[5].checked) checkRule6() // alternating (14)
+  if (pointsLength > 14 && rules[6].checked) checkRule7() // stratification (15)
+  if (pointsLength > 7 && rules[7].checked) checkRule8() // mixture (8)
   // e/o invoke functions
 
-  return breakRules
+  store.commit('updateRulesStatus', brokenRules)
 }

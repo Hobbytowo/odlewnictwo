@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
     dataNumber: 5,
     pointsNumber: 6,
     windowWidth: 15,
+    brokenRules: [],
     rules: [
       {
         idx: 1,
@@ -82,7 +83,7 @@ export const store = new Vuex.Store({
       return getters.isEnoughData && countDeviation(getters.pointsToCreateChart, getters.centerValue)
     },
 
-    // UCL - LCL brakpoints
+    // UCL - LCL breakpoints
     valueUCL: (state, getters) => {
       return round((getters.centerValue + 3 * getters.sigma), 3)
     },
@@ -101,7 +102,7 @@ export const store = new Vuex.Store({
     valueLCL: (state, getters) => {
       return round((getters.centerValue - 3 * getters.sigma), 3)
     }
-    // e/o UCL - LCL brakpoint
+    // e/o UCL - LCL breakpoint
   },
 
   mutations: {
@@ -113,6 +114,9 @@ export const store = new Vuex.Store({
     },
     updateWindowWidth: (state, width) => {
       state.windowWidth = width
+    },
+    updateRulesStatus: (state, rulesStatus) => {
+      state.brokenRules = rulesStatus
     }
   }
 })

@@ -10,17 +10,15 @@ import checkRulesForLastPoints from '@/assets/js/rulesForLastPoints'
 
 export default {
   extends: Bar,
-  data () {
-    return {
-      breakRules: []
-    }
-  },
   computed: {
     chartData () {
       return this.$store.getters.pointsToTest
     },
     windowWidth () {
       return this.$store.state.windowWidth
+    },
+    rules () {
+      return this.$store.state.rules
     },
     pointsColors () {
       return this.chartData.map(x => {
@@ -90,19 +88,14 @@ export default {
       // e/o options
       // e/o if there is enough data
 
-      this.checkRules()
-    },
-    checkRules () {
-      this.breakRules = checkRulesForLastPoints(this.$store)
-      this.breakRules.length && this.clearData()
-    },
-    clearData () {
-      console.log('clear', this.breakRules)
+      checkRulesForLastPoints(this.$store)
     },
     rerender () {
+      if (this.$store.getters.isEnoughData) {
         clearChart(this)
         this.$data._chart.destroy()
         this.renderSpcChart()
+      }
     }
   },
   watch: {
@@ -110,6 +103,9 @@ export default {
       this.rerender()
     },
     windowWidth () {
+      this.rerender()
+    },
+    rules () {
       this.rerender()
     }
   }
