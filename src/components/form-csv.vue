@@ -64,12 +64,11 @@ export default {
       if(!this.path) return
 
       this.watcher = chokidar.watch(this.path, {
-        ignored: /[\/\\]\./,
+        ignored: /[/\\]\./,
         persistent: true
       })
 
       // initial data
-      this.$store.commit('updateRulesStatus', [])
       // this.clearCSVFile() todo
       this.startProcess()
       // e/o initial data
@@ -83,11 +82,16 @@ export default {
       })
     },
     startProcess () {
-      const fileData = fs.readFileSync(this.path)
-      const parsedData = this.parseCSV(fileData)
-      this.$store.commit('updateData', parsedData)
+      fs.readFile(this.path, (err, fileData) => {
+        const parsedData = this.parseCSV(fileData)
+        this.$store.commit('updateData', parsedData)
 
-      this.brokenRules.length && this.stopProcess()
+        this.brokenRules.length && this.stopProcess()
+      })
+      // const parsedData = this.parseCSV(fileData)
+      // this.$store.commit('updateData', parsedData)
+      //
+      // this.brokenRules.length && this.stopProcess()
     },
     parseCSV (csv) {
       return csv.toString().split('\n')
@@ -98,6 +102,8 @@ export default {
     stopProcess () {
       if (this.watcher !== null) this.watcher.close();
       this.watcher = null
+      this.$store.commit('updateData', [])
+      this.$store.commit('updateRulesStatus', [])
       alert(this.message)
     },
     clearCSVFile () {
