@@ -8,7 +8,7 @@
     />
 
     <button
-      :class="{ 'button--disable': !path }"
+      :class="{ 'button--disable': !path || watcher }"
       class="button button--start"
       type="button"
       @click="startWatching"
@@ -83,9 +83,6 @@ export default {
         const parsedData = this.parseCSV(fileData)
         this.$store.commit('updateData', parsedData)
       })
-
-      console.log('this.brokenRules', this.brokenRules)
-      this.brokenRules.length && this.stopProcess()
     },
     parseCSV (csv) {
       return csv.toString().split('\n')
@@ -111,6 +108,11 @@ export default {
     },
     openSettings () {
       this.showSettings = true
+    }
+  },
+  watch: {
+    brokenRules () {
+      this.brokenRules.length && this.stopProcess()
     }
   }
 }
