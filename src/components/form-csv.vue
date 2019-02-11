@@ -45,9 +45,6 @@ export default {
   computed: {
     brokenRules () {
       return this.$store.state.brokenRules
-    },
-    message () {
-      return `Broken rules: ${[...this.brokenRules]}.`
     }
   },
   methods: {
@@ -85,13 +82,10 @@ export default {
       fs.readFile(this.path, (err, fileData) => {
         const parsedData = this.parseCSV(fileData)
         this.$store.commit('updateData', parsedData)
-
-        this.brokenRules.length && this.stopProcess()
       })
-      // const parsedData = this.parseCSV(fileData)
-      // this.$store.commit('updateData', parsedData)
-      //
-      // this.brokenRules.length && this.stopProcess()
+
+      console.log('this.brokenRules', this.brokenRules)
+      this.brokenRules.length && this.stopProcess()
     },
     parseCSV (csv) {
       return csv.toString().split('\n')
@@ -100,11 +94,13 @@ export default {
         .map(data => data.replace(',', '.') * 1)
     },
     stopProcess () {
-      if (this.watcher !== null) this.watcher.close();
+      if (this.watcher !== null) this.watcher.close()
       this.watcher = null
+
+      alert(`Broken rules: ${[...this.brokenRules]}.`)
+
       this.$store.commit('updateData', [])
       this.$store.commit('updateRulesStatus', [])
-      alert(this.message)
     },
     clearCSVFile () {
       fs.writeFile(this.path, '', err => {
