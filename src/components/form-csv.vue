@@ -65,10 +65,7 @@ export default {
         persistent: true
       })
 
-      // initial data
-      // this.clearCSVFile() todo
-      this.startProcess()
-      // e/o initial data
+      this.initProcess()
 
       this.watcher
       .on('change', () => {
@@ -76,6 +73,15 @@ export default {
       })
       .on('error', error => {
         console.error('Error happened', error)
+      })
+    },
+    initProcess () {
+      // this.clearCSVFile() todo
+
+      this.$store.commit('updateRulesStatus', [])
+
+      this.$nextTick(() => {
+        this.startProcess()
       })
     },
     startProcess () {
@@ -95,9 +101,6 @@ export default {
       this.watcher = null
 
       alert(`Broken rules: ${[...this.brokenRules]}.`)
-
-      this.$store.commit('updateData', [])
-      this.$store.commit('updateRulesStatus', [])
     },
     clearCSVFile () {
       fs.writeFile(this.path, '', err => {
