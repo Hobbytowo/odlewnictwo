@@ -97,10 +97,12 @@ export default {
         .map(data => data.replace(',', '.') * 1)
     },
     stopProcess () {
-      if (this.watcher !== null) this.watcher.close()
-      this.watcher = null
+      // if (this.watcher !== null) this.watcher.close()
+      // this.watcher = nulls
 
-      alert(`Broken rules: ${[...this.brokenRules]}.`)
+      setTimeout(() => {
+        alert(`Broken rules: ${[...this.brokenRules]}.`)
+      }, 800)
     },
     clearCSVFile () {
       fs.writeFile(this.path, '', err => {
