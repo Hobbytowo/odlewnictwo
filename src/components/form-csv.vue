@@ -8,7 +8,7 @@
     />
 
     <button
-      :class="{ 'button--disable': !path || watcher }"
+      :class="{ 'button--disable': (!path && !watcher) || (path && watcher) }"
       class="button button--start"
       type="button"
       @click="startWatching"
@@ -39,7 +39,8 @@ export default {
     return {
       watcher: null,
       path: '',
-      showSettings: false
+      showSettings: false,
+      fileData: null
     }
   },
   computed: {
@@ -58,7 +59,7 @@ export default {
       })
     },
     startWatching () {
-      if(!this.path) return
+      if ((!this.path && !this.watcher) || (this.path && this.watcher)) return
 
       this.watcher = chokidar.watch(this.path, {
         ignored: /[/\\]\./,
@@ -86,8 +87,14 @@ export default {
     },
     startProcess () {
       fs.readFile(this.path, (err, fileData) => {
-        const parsedData = this.parseCSV(fileData)
-        this.$store.commit('updateData', parsedData)
+        this.fileData = fileData
+
+        if (!fileData) {
+          console.error('!fileData', (err))
+        } else {
+          const parsedData = this.parseCSV(fileData)
+          this.$store.commit('updateData', parsedData)
+        }
       })
     },
     parseCSV (csv) {
@@ -97,12 +104,14 @@ export default {
         .map(data => data.replace(',', '.') * 1)
     },
     stopProcess () {
-      // if (this.watcher !== null) this.watcher.close()
-      // this.watcher = nulls
+      if (this.watcher !== null) {
+        this.watcher.close()
+        this.watcher = null
 
-      setTimeout(() => {
-        alert(`Broken rules: ${[...this.brokenRules]}.`)
-      }, 800)
+        setTimeout(() => {
+          alert(`Broken rules: ${[...this.brokenRules]}.`)
+        }, 800)
+      }
     },
     clearCSVFile () {
       fs.writeFile(this.path, '', err => {
@@ -118,6 +127,17 @@ export default {
   watch: {
     brokenRules () {
       this.brokenRules.length && this.stopProcess()
+    },
+    path () {
+      if (this.watcher !== null) {
+        this.watcher.close()
+        this.watcher = null
+
+        this.$nextTick(() => {
+          this.$store.commit('updateRulesStatus', [])
+          this.$store.commit('updateData', [])
+        })
+      }
     }
   }
 }
