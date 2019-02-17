@@ -60,28 +60,26 @@
       startWatching() {
         if ((!this.path && !this.watcher) || (this.path && this.watcher)) return
 
-        this.watcher = chokidar.watch(this.path, {
-          ignored: /[/\\]\./,
-          persistent: true
-        })
-
-        this.initProcess()
-
-        this.watcher
-          .on('change', () => {
+        fs.writeFile(this.path, '', err => { // initial clearing data
+          if (err) { // error
+            alert('Please, close your csv file and try again.')
+            console.error("An error ocurred clearing the file " + err.message)
+          } else { // succeed cleared data
             this.startProcess()
-          })
-          .on('error', error => {
-            console.error('Error happened', error)
-          })
-      },
-      initProcess() {
-        // this.clearCSVFile() todo
 
-        this.$store.commit('updateRulesStatus', [])
+            this.watcher = chokidar.watch(this.path, {
+              ignored: /[/\\]\./,
+              persistent: true
+            })
 
-        this.$nextTick(() => {
-          this.startProcess()
+            this.watcher
+              .on('change', () => {
+                this.startProcess()
+              })
+              .on('error', error => {
+                console.error('Error happened', error)
+              })
+          }
         })
       },
       startProcess() {
@@ -91,8 +89,11 @@
             setTimeout(() => {
               this.startProcess()
             }, 500)
-          } else {
+          } else if (err) { // different error
+            console.error(err)
+          } {
             const parsedData = this.parseCSV(fileData)
+            parsedData.pop()
             this.$store.commit('updateData', parsedData)
           }
         })
@@ -100,8 +101,8 @@
       parseCSV(csv) {
         return csv.toString().split('\n')
           .map(data => data.replace('\r', ''))
-          .filter(data => data)
-          .map(data => data.replace(',', '.') * 1)
+          .map(data => data.replace(',', '.'))
+          .map(data => data.replace(/"/g, '') * 1)
       },
       stopProcess() {
         if (this.watcher !== null) {
@@ -110,15 +111,10 @@
 
           setTimeout(() => {
             alert(`Broken rules: ${[...this.brokenRules]}.`)
+            this.$store.commit('updateRulesStatus', [])
+            this.$store.commit('updateData', [])
           }, 800)
         }
-      },
-      clearCSVFile() {
-        fs.writeFile(this.path, '', err => {
-          if (err) {
-            alert("An error ocurred creating the file " + err.message)
-          }
-        })
       },
       openSettings() {
         this.showSettings = true
@@ -180,7 +176,14 @@
       border-radius: 35px;
       font-size: 19px;
       line-height: 25px;
-      border: 3px solid white;
+      border: 3px solid yellow;
+      color: yellow;
+
+      &:hover {
+        background-color: #222;
+        border: 3px solid orange;
+        color: orange;
+      }
     }
 
     &--settings {
@@ -190,10 +193,14 @@
     &--disable {
       opacity: 0.5;
       cursor: context-menu;
+      border: 2px solid white;
+      color: #fff;
 
       &:hover {
         opacity: 0.5;
         background-color: #222;
+        border: 2px solid white;
+        color: #fff;
       }
     }
   }

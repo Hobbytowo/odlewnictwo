@@ -33,7 +33,7 @@ export default {
     },
     pointsColors() {
       return this.chartData.map((x, idx) => {
-        return idx > this.chartData.length - this.maxBrokenData
+        return idx >= this.chartData.length - this.maxBrokenData
           ? 'red'
           : 'green'
       })
