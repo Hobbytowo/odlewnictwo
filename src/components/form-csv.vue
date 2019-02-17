@@ -60,28 +60,26 @@
       startWatching() {
         if ((!this.path && !this.watcher) || (this.path && this.watcher)) return
 
-        this.watcher = chokidar.watch(this.path, {
-          ignored: /[/\\]\./,
-          persistent: true
-        })
-
-        this.initProcess()
-
-        this.watcher
-          .on('change', () => {
+        fs.writeFile(this.path, '', err => { // initial clearing data
+          if (err) { // error
+            alert('Please, close your csv file and try again.')
+            console.error("An error ocurred clearing the file " + err.message)
+          } else { // succeed cleared data
             this.startProcess()
-          })
-          .on('error', error => {
-            console.error('Error happened', error)
-          })
-      },
-      initProcess() {
-        // this.clearCSVFile() todo
 
-        this.$store.commit('updateRulesStatus', [])
+            this.watcher = chokidar.watch(this.path, {
+              ignored: /[/\\]\./,
+              persistent: true
+            })
 
-        this.$nextTick(() => {
-          this.startProcess()
+            this.watcher
+              .on('change', () => {
+                this.startProcess()
+              })
+              .on('error', error => {
+                console.error('Error happened', error)
+              })
+          }
         })
       },
       startProcess() {
@@ -113,15 +111,10 @@
 
           setTimeout(() => {
             alert(`Broken rules: ${[...this.brokenRules]}.`)
+            this.$store.commit('updateRulesStatus', [])
+            this.$store.commit('updateData', [])
           }, 800)
         }
-      },
-      clearCSVFile() {
-        fs.writeFile(this.path, '', err => {
-          if (err) {
-            alert("An error ocurred creating the file " + err.message)
-          }
-        })
       },
       openSettings() {
         this.showSettings = true
