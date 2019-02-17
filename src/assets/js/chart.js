@@ -56,49 +56,52 @@ export default {
       // if there is enough data
       checkRulesForLastPoints(this.$store)
 
-      this.renderChart({
-          labels: new Array(this.chartData.length).fill().map((x, i) => i + 1),
-          datasets: [
-            {
-              type: 'scatter',
-              label: 'point',
-              pointBackgroundColor: this.pointsColors,
-              backgroundColor: 'transparent',
-              data: this.chartData
-            }
-          ],
-        },
-        // options
-        {
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {display: false},
-          annotation: createAnnotations(this.$store.getters),
-          // zoom
-          scales: {
-            xAxes: [{
-              ticks: {
-                beginAtZero: true,
-                min: this.chartData.length - this.windowWidth - 1,
-                max: this.chartData.length,
-                stepSize: 0.4
-              },
-              scaleLabel: {
-                display: true
+      this.$nextTick(() => {
+        this.renderChart({
+            labels: new Array(this.chartData.length).fill().map((x, i) => i + 1),
+            datasets: [
+              {
+                type: 'scatter',
+                label: 'point',
+                pointBackgroundColor: this.pointsColors,
+                backgroundColor: 'transparent',
+                data: this.chartData
               }
-            }]
+            ],
           },
-          pan: {
-            enabled: true,
-            mode: 'x'
-          },
-          zoom: {
-            enabled: true,
-            mode: 'x',
-          },
-          // e.o zoom
-        })
-      // e/o options
+          // options
+          {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {display: false},
+            annotation: createAnnotations(this.$store.getters),
+            // zoom
+            scales: {
+              xAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                  min: this.chartData.length - this.windowWidth - 1,
+                  max: this.chartData.length,
+                  stepSize: 0.4
+                },
+                scaleLabel: {
+                  display: true
+                }
+              }]
+            },
+            pan: {
+              enabled: true,
+              mode: 'x'
+            },
+            zoom: {
+              enabled: true,
+              mode: 'x',
+            },
+            // e.o zoom
+          })
+        // e/o options
+      })
+
       // e/o if there is enough data
     },
     rerender() {
