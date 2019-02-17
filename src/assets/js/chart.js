@@ -105,11 +105,9 @@ export default {
       // e/o if there is enough data
     },
     rerender() {
-      if (this.$store.getters.isEnoughData) {
-        clearChart(this)
-        this.$data._chart.destroy()
-        this.renderSpcChart()
-      }
+      clearChart(this)
+      this.$data._chart.destroy()
+      this.renderSpcChart()
     }
   },
   watch: {
@@ -122,8 +120,5 @@ export default {
     rules() {
       this.rerender()
     }
-    // brokenRules () {
-    //   this.rerender()
-    // }
   }
 }
