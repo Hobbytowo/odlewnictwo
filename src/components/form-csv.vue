@@ -199,6 +199,8 @@
       &:hover {
         opacity: 0.5;
         background-color: #222;
+        border: 2px solid white;
+        color: #fff;
       }
     }
   }
