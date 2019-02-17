@@ -91,8 +91,11 @@
             setTimeout(() => {
               this.startProcess()
             }, 500)
-          } else {
+          } else if (err) { // different error
+            console.error(err)
+          } {
             const parsedData = this.parseCSV(fileData)
+            parsedData.pop()
             this.$store.commit('updateData', parsedData)
           }
         })
@@ -100,8 +103,8 @@
       parseCSV(csv) {
         return csv.toString().split('\n')
           .map(data => data.replace('\r', ''))
-          .filter(data => data)
-          .map(data => data.replace(',', '.') * 1)
+          .map(data => data.replace(',', '.'))
+          .map(data => data.replace(/"/g, '') * 1)
       },
       stopProcess() {
         if (this.watcher !== null) {
