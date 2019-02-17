@@ -90,6 +90,7 @@ export default {
 
         updatedRules.push({
           idx: rule.idx,
+          nrOfData: rule.nrOfData,
           name: rule.name,
           description: rule.description,
           checked

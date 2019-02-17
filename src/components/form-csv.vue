@@ -1,25 +1,25 @@
 <template lang="html">
   <div class="buttons">
-      <button
-        class="button button--select"
-        type="button"
-        @click="selectFile"
-        v-text="this.path ? 'Change path' : 'Select file'"
-      />
-
-      <button
-        class="button button--settings"
-        type="button"
-        @click="openSettings"
-        v-text="'Settings'"
-      />
+    <button
+      class="button button--select"
+      type="button"
+      @click="selectFile"
+      v-text="this.path ? 'File selected' : 'Select file'"
+    />
 
     <button
-      :class="{ 'button--disable': !path }"
+      :class="{ 'button--disable': (!path && !watcher) || (path && watcher) }"
       class="button button--start"
       type="button"
       @click="startWatching"
-      v-text="watcher ? 'Stop watching' : 'Start watching'"
+      v-text="(watcher && this.path) ? 'Watching...' : 'Start watching'"
+    />
+
+    <button
+      class="button button--settings"
+      type="button"
+      @click="openSettings"
+      v-text="'Settings'"
     />
 
     <modal v-if="showSettings" @close="showSettings = false"/>
@@ -27,78 +27,118 @@
 </template>
 
 <script>
-import Modal from './settings'
-import chokidar from 'chokidar'
-import fs from 'fs'
+  import Modal from './settings'
+  import chokidar from 'chokidar'
+  import fs from 'fs'
 
-export default {
-  components: {
-    Modal
-  },
-  data () {
-    return {
-      watcher: null,
-      path: '',
-      showSettings: false
-    }
-  },
-  methods: {
-    selectFile () {
-      const { dialog } = require('electron').remote
-
-      dialog.showOpenDialog({ properties: ['openFile']}, path => {
-        path
-          ? this.path = path[0]
-          : console.log("No file selected")
-      })
+  export default {
+    components: {
+      Modal
     },
-    startWatching () {
-      if(!this.path) return
-
-      this.watcher = chokidar.watch(this.path, {
-        ignored: /[\/\\]\./,
-        persistent: true
-      })
-
-      // initial data
-      const fileData = fs.readFileSync(this.path)
-      const parsedData = this.parseCSV(fileData)
-      this.$store.commit('updateData', parsedData)
-      // e/o initial data
-
-      this.watcher
-      .on('change', () => {
-        const fileData = fs.readFileSync(this.path)
-        const parsedData = this.parseCSV(fileData)
-        this.$store.commit('updateData', parsedData)
-      })
-      .on('error', error => {
-        console.error('Error happened', error)
-      })
+    data() {
+      return {
+        watcher: null,
+        path: '',
+        showSettings: false
+      }
     },
-    parseCSV (csv) {
-      return csv.toString().split('\n')
-        .map(data => data.replace('\r', ''))
-        .filter(data => data)
-        .map(data => data.replace(',', '.') * 1)
+    computed: {
+      brokenRules() {
+        return this.$store.state.brokenRules
+      }
     },
-    clearData () {
-      this.watcher.close()
-      this.watcher = null
-      this.clearCSVFIle()
-    },
-    clearCSVFile () {
-      fs.writeFile(this.path, '', err => {
-        if (err) {
-          alert("An error ocurred creating the file "+ err.message)
+    methods: {
+      selectFile() {
+        const {dialog} = require('electron').remote
+
+        dialog.showOpenDialog({properties: ['openFile']}, path => {
+          path
+            ? this.path = path[0]
+            : console.log("No file selected")
+        })
+      },
+      startWatching() {
+        if ((!this.path && !this.watcher) || (this.path && this.watcher)) return
+
+        this.watcher = chokidar.watch(this.path, {
+          ignored: /[/\\]\./,
+          persistent: true
+        })
+
+        this.initProcess()
+
+        this.watcher
+          .on('change', () => {
+            this.startProcess()
+          })
+          .on('error', error => {
+            console.error('Error happened', error)
+          })
+      },
+      initProcess() {
+        // this.clearCSVFile() todo
+
+        this.$store.commit('updateRulesStatus', [])
+
+        this.$nextTick(() => {
+          this.startProcess()
+        })
+      },
+      startProcess() {
+        fs.readFile(this.path, (err, fileData) => {
+          if (!fileData) {
+            console.error(err)
+            setTimeout(() => {
+              this.startProcess()
+            }, 500)
+          } else {
+            const parsedData = this.parseCSV(fileData)
+            this.$store.commit('updateData', parsedData)
+          }
+        })
+      },
+      parseCSV(csv) {
+        return csv.toString().split('\n')
+          .map(data => data.replace('\r', ''))
+          .filter(data => data)
+          .map(data => data.replace(',', '.') * 1)
+      },
+      stopProcess() {
+        if (this.watcher !== null) {
+          this.watcher.close()
+          this.watcher = null
+
+          setTimeout(() => {
+            alert(`Broken rules: ${[...this.brokenRules]}.`)
+          }, 800)
         }
-      })
+      },
+      clearCSVFile() {
+        fs.writeFile(this.path, '', err => {
+          if (err) {
+            alert("An error ocurred creating the file " + err.message)
+          }
+        })
+      },
+      openSettings() {
+        this.showSettings = true
+      }
     },
-    openSettings () {
-      this.showSettings = true
+    watch: {
+      brokenRules() {
+        this.brokenRules.length && this.stopProcess()
+      },
+      path() {
+        if (this.watcher !== null) {
+          this.watcher.close()
+          this.watcher = null
+        }
+
+        this.$store.commit('updateRulesStatus', [])
+        this.$store.commit('updateData', [])
+      }
     }
   }
-}
 </script>
 
 <style lang="scss" scoped>
@@ -139,6 +179,7 @@ export default {
       height: 70px;
       border-radius: 35px;
       font-size: 19px;
+      line-height: 25px;
       border: 3px solid white;
     }
 
