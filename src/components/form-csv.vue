@@ -39,8 +39,7 @@
       return {
         watcher: null,
         path: '',
-        showSettings: false,
-        fileData: null
+        showSettings: false
       }
     },
     computed: {
@@ -87,10 +86,11 @@
       },
       startProcess() {
         fs.readFile(this.path, (err, fileData) => {
-          this.fileData = fileData
-
           if (!fileData) {
-            console.error('!fileData', (err))
+            console.error(err)
+            setTimeout(() => {
+              this.startProcess()
+            }, 500)
           } else {
             const parsedData = this.parseCSV(fileData)
             this.$store.commit('updateData', parsedData)
