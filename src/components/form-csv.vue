@@ -183,7 +183,14 @@
       border-radius: 35px;
       font-size: 19px;
       line-height: 25px;
-      border: 3px solid white;
+      border: 3px solid yellow;
+      color: yellow;
+
+      &:hover {
+        background-color: #222;
+        border: 3px solid orange;
+        color: orange;
+      }
     }
 
     &--settings {
@@ -193,6 +200,8 @@
     &--disable {
       opacity: 0.5;
       cursor: context-menu;
+      border: 2px solid white;
+      color: #fff;
 
       &:hover {
         opacity: 0.5;
