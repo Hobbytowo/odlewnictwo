@@ -14,6 +14,12 @@ export default {
     chartData() {
       return this.$store.getters.pointsToTest
     },
+    dataNumber() {
+      return this.$store.state.dataNumber
+    },
+    pointsNumber() {
+      return this.$store.state.pointsNumber
+    },
     windowWidth() {
       return this.$store.state.windowWidth
     },
@@ -112,6 +118,12 @@ export default {
   },
   watch: {
     chartData() {
+      this.rerender()
+    },
+    dataNumber() {
+      this.rerender()
+    },
+    pointsNumber() {
       this.rerender()
     },
     windowWidth() {
