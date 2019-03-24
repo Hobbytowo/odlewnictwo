@@ -12,15 +12,49 @@
              <!-- window width -->
              <div class="setting-wrapper">
                <div class="setting">
-                  <label for="window" class="label label--window">Window width:</label>
+                  <label for="window" class="label label--window">Quantity probes</label>
                   <input
                     ref="windowInput"
                     type="number"
                     class="input input--window"
                     min="1"
-                    :value="$store.state.windowWidth"
+                    :value="$store.state.dataNumber"
                     required
                   >
+               </div>
+             </div>
+             <!--e/o window width -->
+
+             <!-- window width -->
+             <div class="setting-wrapper">
+               <div class="setting">
+                 <label for="pointsNumber" class="label label--window">N.O. probes:</label>
+                 <input
+                   ref="pointsNumber"
+                   id="pointsNumber"
+                   type="number"
+                   class="input input--window"
+                   min="1"
+                   :value="$store.state.pointsNumber"
+                   required
+                 >
+               </div>
+             </div>
+             <!--e/o window width -->
+
+             <!-- window width -->
+             <div class="setting-wrapper">
+               <div class="setting">
+                 <label for="window" class="label label--window">Window width:</label>
+                 <input
+                   ref="windowInput"
+                   id="window"
+                   type="number"
+                   class="input input--window"
+                   min="1"
+                   :value="$store.state.windowWidth"
+                   required
+                 >
                </div>
              </div>
              <!--e/o window width -->
