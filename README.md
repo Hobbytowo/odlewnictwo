@@ -17,6 +17,10 @@ In settings it is possible to change:
 npm install
 ```
 
+## Built with
+- Vue.js
+- Chart.js + Vue chart.js
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve || npm run electron:serve
