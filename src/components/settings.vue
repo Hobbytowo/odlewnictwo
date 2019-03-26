@@ -9,7 +9,7 @@
            </div>
 
            <div class="modal-body body">
-             <!-- window width -->
+             <!-- quantity probes -->
              <div class="setting-wrapper">
                <div class="setting">
                   <label for="window" class="label label--window">Quantity probes</label>
@@ -23,9 +23,9 @@
                   >
                </div>
              </div>
-             <!--e/o window width -->
+             <!--e/o quantity probes -->
 
-             <!-- window width -->
+             <!-- N.O. probes -->
              <div class="setting-wrapper">
                <div class="setting">
                  <label for="pointsNumber" class="label label--window">N.O. probes:</label>
@@ -40,7 +40,7 @@
                  >
                </div>
              </div>
-             <!--e/o window width -->
+             <!--e/o N.O. probes -->
 
              <!-- window width -->
              <div class="setting-wrapper">

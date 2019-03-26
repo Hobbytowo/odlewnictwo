@@ -65,7 +65,7 @@
             alert('Please, close your csv file and try again.')
             console.error("An error ocurred clearing the file " + err.message)
           } else { // succeed cleared data
-            this.startProcess()
+            this.$store.commit('updateData', [])
 
             this.watcher = chokidar.watch(this.path, {
               ignored: /[/\\]\./,
@@ -74,7 +74,7 @@
 
             this.watcher
               .on('change', () => {
-                this.startProcess()
+                this.onChange()
               })
               .on('error', error => {
                 console.error('Error happened', error)
@@ -82,12 +82,12 @@
           }
         })
       },
-      startProcess() {
+      onChange() {
         fs.readFile(this.path, (err, fileData) => {
           if (!fileData) {
             console.error(err)
             setTimeout(() => {
-              this.startProcess()
+              this.onChange()
             }, 500)
           } else if (err) { // different error
             console.error(err)
@@ -112,7 +112,6 @@
           setTimeout(() => {
             alert(`Broken rules: ${[...this.brokenRules]}.`)
             this.$store.commit('updateRulesStatus', [])
-            this.$store.commit('updateData', [])
           }, 800)
         }
       },
