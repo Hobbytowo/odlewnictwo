@@ -142,20 +142,23 @@
     justify-content: space-around;
     align-items: center;
 
-    padding: 0 50px;
+    width: 600px;
+    margin: 0 auto;
   }
 
   .button {
-    height: 60px;
+    height: 55px;
     border-radius: 30px;
-    border: 2px solid white;
+    border: 1px solid white;
     cursor: pointer;
-    padding: 10px 20px;
+    padding: 8px 25px;
     margin: 15px;
 
-    background-color: #222;
+    background-color: #000;
     color: white;
-    font-size: 17px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
 
     display: flex;
     flex-direction: column;
@@ -166,21 +169,21 @@
     transition: all 0.3s;
 
     &:hover {
-      background-color: #555;
+      background-color: #051818;
     }
 
     &--start {
       width: 160px;
-      height: 70px;
-      border-radius: 35px;
-      font-size: 19px;
-      line-height: 25px;
-      border: 3px solid yellow;
-      color: yellow;
+      height: 65px;
+      border-radius: 30px;
+      font-size: 14px;
+      line-height: 20px;
+      border: 2px solid #c3b000;
+      color: #c3b000;
 
       &:hover {
         background-color: #222;
-        border: 3px solid orange;
+        border: 2px solid orange;
         color: orange;
       }
     }
@@ -190,17 +193,7 @@
     }
 
     &--disable {
-      opacity: 0.5;
-      cursor: context-menu;
-      border: 2px solid white;
-      color: #fff;
-
-      &:hover {
-        opacity: 0.5;
-        background-color: #222;
-        border: 2px solid white;
-        color: #fff;
-      }
+      pointer-events: none;
     }
   }
 </style>
