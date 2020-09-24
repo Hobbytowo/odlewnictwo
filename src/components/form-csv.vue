@@ -89,6 +89,8 @@
               })
           }
         })
+
+        this.$emit('setIsFileSelectedStatus', true)
       },
       stopWatching () {
         this.$refs.watchButton.blur()

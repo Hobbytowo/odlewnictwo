@@ -14,8 +14,17 @@
       </button>
     </header>
 
-    <form-csv/>
-    <chart/>
+    <form-csv
+      @setIsFileSelectedStatus="setIsFileSelectedStatus"
+    />
+
+    <chart
+      v-if="isFileWatching"
+    />
+    <div v-else class="no-file-info">
+      <p>None file is watching</p>
+      <p>Click on "add file" icon, select file and start watch it</p>
+    </div>
 
     <settings-modal
       v-if="showSettings"
@@ -40,9 +49,15 @@ export default {
   },
   data() {
    return {
-     showSettings: false
+     showSettings: false,
+     isFileWatching: false
     }
   },
+  methods: {
+    setIsFileSelectedStatus (boolean) {
+      this.isFileWatching = boolean
+    }
+  }
 }
 </script>
 
@@ -82,5 +97,10 @@ export default {
     background: transparent;
     border: none;
     outline: none;
+  }
+
+  .no-file-info {
+    margin-top: 40px;
+    text-align: center;
   }
 </style>
