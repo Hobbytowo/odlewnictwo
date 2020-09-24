@@ -1,45 +1,53 @@
 <template lang="html">
   <div class="buttons">
-    <button
-      class="button button--select"
-      type="button"
-      @click="selectFile"
-      v-text="this.path ? 'File selected' : 'Select file'"
-    />
+    <div class="button-wrapper button-wrapper--select">
+      <button
+        class="button button--select"
+        :title="path ? 'Change file' : 'Select file'"
+        @click="selectFile"
+      >
+        <file-add-img/>
+      </button>
 
-    <button
-      :class="{ 'button--disable': (!path && !watcher) || (path && watcher) }"
-      class="button button--start"
-      type="button"
-      @click="startWatching"
-      v-text="(watcher && this.path) ? 'Watching...' : 'Start watching'"
-    />
+      <div class="selected-file">
+        <span class="span" v-if="path || watcher">
+         Selected file: <span class="span--file">{{ path }}</span>
+        </span>
+      </div>
+    </div>
 
-    <button
-      class="button button--settings"
-      type="button"
-      @click="openSettings"
-      v-text="'Settings'"
-    />
+    <div v-if="path || watcher" class="button-wrapper">
+      <button
+        ref="watchButton"
+        :class="{ 'button--watching': watcher }"
+        class="button button--start"
+        @click="!watcher ? startWatching() : stopWatching()"
+      >
+        <watch-img v-if="!watcher"/>
+        <stop-watch-img v-if="watcher"/>
 
-    <modal v-if="showSettings" @close="showSettings = false"/>
+        <span
+          class="span"
+          v-text="watcher != null ? 'Stop watching' : 'Start watching'"
+        />
+      </button>
+    </div>
   </div>
 </template>
 
 <script>
-  import Modal from './settings'
   import chokidar from 'chokidar'
   import fs from 'fs'
+  import FileAddImg from "./images/file-add";
+  import WatchImg from "./images/watch";
+  import StopWatchImg from "./images/watch-stop";
 
   export default {
-    components: {
-      Modal
-    },
-    data() {
+      components: {StopWatchImg, WatchImg, FileAddImg},
+      data() {
       return {
         watcher: null,
         path: '',
-        showSettings: false
       }
     },
     computed: {
@@ -58,11 +66,11 @@
         })
       },
       startWatching() {
-        if ((!this.path && !this.watcher) || (this.path && this.watcher)) return
+        this.$refs.watchButton.blur()
 
         fs.writeFile(this.path, '', err => { // initial clearing data
           if (err) { // error
-            alert('Please, close your csv file and try again.')
+            alert('When app is starting to watch selected file, file has to be close.\nClose selected file, if it is open, and try again.')
             console.error("An error ocurred clearing the file " + err.message)
           } else { // succeed cleared data
             this.$store.commit('updateData', [])
@@ -81,6 +89,12 @@
               })
           }
         })
+      },
+      stopWatching () {
+        this.$refs.watchButton.blur()
+        this.watcher.close()
+        this.watcher = null
+        this.$store.commit('updateData', [])
       },
       onChange() {
         fs.readFile(this.path, (err, fileData) => {
@@ -115,9 +129,6 @@
           }, 800)
         }
       },
-      openSettings() {
-        this.showSettings = true
-      }
     },
     watch: {
       brokenRules() {
@@ -139,61 +150,58 @@
 <style lang="scss" scoped>
   .buttons {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    width: 600px;
-    margin: 0 auto;
+  .button-wrapper {
+    display: flex;
+    align-items: center;
+    &--select {
+      margin-bottom: 10px;
+    }
   }
 
   .button {
-    height: 55px;
-    border-radius: 30px;
-    border: 1px solid white;
+    background: transparent;
+    border: none;
+    outline: none;
     cursor: pointer;
-    padding: 8px 25px;
-    margin: 15px;
 
-    background-color: #000;
-    color: white;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1.4px;
+    transition: color .25s;
+    color: #F2E9E4;
 
     display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
 
-    outline: none;
-    transition: all 0.3s;
-
-    &:hover {
-      background-color: #051818;
-    }
-
     &--start {
-      width: 160px;
-      height: 65px;
-      border-radius: 30px;
-      font-size: 14px;
-      line-height: 20px;
-      border: 2px solid #c3b000;
-      color: #c3b000;
-
-      &:hover {
-        background-color: #222;
-        border: 2px solid orange;
-        color: orange;
+      &:hover, &:focus {
+        color: #c6b7b1;
+      }
+      &:hover /deep/ svg, &:focus /deep/ svg {
+        fill: #c6b7b1;
       }
     }
-
-    &--settings {
-      order: 1;
+    &--watching {
+      color: #d8c99b;
+      & /deep/ svg {
+        fill: #d8c99b;
+      }
     }
+  }
 
-    &--disable {
-      pointer-events: none;
+  .span {
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0 5px;
+
+    &--file {
+      font-style: italic;
     }
+  }
+
+  .selected-file {
+    display: flex;
+    align-items: center;
   }
 </style>
