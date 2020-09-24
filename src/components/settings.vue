@@ -155,22 +155,22 @@ export default {
 }
 
 .modal-container {
-  min-width: 300px;
-  max-width: 70vw;
+  max-width: 100vw;
+  width: 350px;
   padding: 20px 30px;
   background-color: #ddd;
   border-radius: 5px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  box-shadow: 0 2px 8px rgba(#252541, .33);
   transition: all .3s ease;
 }
 
 .title {
   margin: 20px 0;
-  color: #42b983;
+  color: #4a4e69;
   font-weight: 700;
 
   &--main {
-    margin-top: 0;
+    margin: 5px 0;
   }
 }
 
@@ -186,7 +186,7 @@ export default {
 
 .label {
   font-size: 14px;
-  color: #222;
+  color: #252541;
   cursor: pointer;
   margin: 0 10px;
 
@@ -199,6 +199,8 @@ export default {
   width: 50px;
   padding: 4px;
   border-radius: 5px;
+  box-shadow: none;
+  border: 1px solid #252541;
 }
 
 .checkbox {
@@ -206,7 +208,7 @@ export default {
 }
 
 .button {
-  background-color: #333;
+  background-color: #252541;
   color: #ddd;
   border: 1px solid #ddd;
   padding: 8px 15px;
@@ -219,7 +221,7 @@ export default {
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #42b983;
+    background-color: #4a4e69;
   }
 }
 

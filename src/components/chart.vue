@@ -20,7 +20,7 @@ export default {
   .container {
     background-color: #ddd;
     padding: 50px;
-    margin: 20px 50px;
+    margin: 20px 0;
   }
 
   .chart {
