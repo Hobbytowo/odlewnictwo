@@ -23,7 +23,7 @@
     />
     <div v-else class="no-file-info">
       <p>None file is watching</p>
-      <p>Click on "add file" icon, select file and start watch it</p>
+      <p>Click on "add file" icon, select file and start watching it</p>
     </div>
 
     <settings-modal
