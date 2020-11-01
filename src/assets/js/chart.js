@@ -93,6 +93,12 @@ export default {
                 scaleLabel: {
                   display: true
                 }
+              }],
+              yAxes: [{
+                ticks: {
+                  min: this.$store.getters.valueLCL - 0.1,
+                  max: this.$store.getters.valueUCL + 0.1,
+                }
               }]
             },
             pan: {
