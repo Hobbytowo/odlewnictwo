@@ -1,8 +1,4 @@
 import {Bar} from 'vue-chartjs'
-// eslint-disable-next-line
-import chartjsPluginAnnotation from "chartjs-plugin-annotation";
-// eslint-disable-next-line
-import chartjsPluginZoom from "chartjs-plugin-zoom";
 import showMessage from '@/assets/js/chartPlugins/message'
 import clearChart from '@/assets/js/chartPlugins/clearChart'
 import createAnnotations from '@/assets/js/chartPlugins/annotations'
