@@ -11,7 +11,7 @@ export function makePoints (data, dataNumber) {
 }
 
 export function countMean (points) {
-  return round(_.mean(points), 3)
+  return _.mean(points)
 }
 
 export function countDeviation (points, centerValue) {
@@ -19,5 +19,5 @@ export function countDeviation (points, centerValue) {
     return (point - centerValue) ** 2
   })
 
-  return round(Math.sqrt(_.sum(powers) / points.length), 3)
+  return Math.sqrt(_.sum(powers) / points.length)
 }

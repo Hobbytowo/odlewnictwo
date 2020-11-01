@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { makePoints, countMean, countDeviation, round } from '@/assets/js/operationsHelpers.js'
+import { makePoints, countMean, countDeviation } from '@/assets/js/operationsHelpers.js'
 
 Vue.use(Vuex)
 
@@ -93,7 +93,7 @@ export const store = new Vuex.Store({
 
     // UCL - LCL breakpoints
     valueUCL: (state, getters) => {
-      return round((getters.centerValue + 3 * getters.sigma), 3)
+      return getters.centerValue + 3 * getters.sigma
     },
     value2SigmaUpper: (state, getters) => {
       return getters.valueUCL - getters.sigma
@@ -108,7 +108,7 @@ export const store = new Vuex.Store({
       return getters.value1SigmaLower - getters.sigma
     },
     valueLCL: (state, getters) => {
-      return round((getters.centerValue - 3 * getters.sigma), 3)
+      return getters.centerValue - 3 * getters.sigma
     }
     // e/o UCL - LCL breakpoint
   },
