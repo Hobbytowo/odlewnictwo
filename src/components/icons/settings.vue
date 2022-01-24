@@ -42,7 +42,7 @@
 
 <style scoped lang="scss">
   .svg {
-    fill: #F2E9E4;
+    fill: #333;
     width: 26px;
 
     transition: transform .25s;

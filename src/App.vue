@@ -42,8 +42,8 @@ export default {
 
 <style lang="scss">
   body {
-    background-color: #4A4E69;
-    color: #F2E9E4;
+    background-color: antiquewhite;
+    color: #333;
     font-family: 'Lato', sans-serif;
   }
 
@@ -59,27 +59,12 @@ export default {
 
   .app-title {
     font-size: 16px;
-    font-weight: 400;
-    position: relative;
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      height: 2px;
-      width: 100%;
-      background: #F2E9E4;
-    }
+    font-weight: bold;
   }
 
   .button {
     background: transparent;
     border: none;
     outline: none;
-  }
-
-  .no-file-info {
-    margin-top: 40px;
-    text-align: center;
   }
 </style>
