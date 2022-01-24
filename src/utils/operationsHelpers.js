@@ -4,12 +4,6 @@ export function round (nr, space) {
   return Math.round(nr * (10 ** space)) / (10 ** space)
 }
 
-export function makePoints (data, dataNumber) {
-  return _.chunk(data, dataNumber)
-  .filter(arr => arr.length === 5)
-  .map(countMean)
-}
-
 export function countMean (points) {
   return _.mean(points)
 }

@@ -5,16 +5,17 @@
          <form class="modal-container">
 
            <div class="modal-header header">
-             <h3 class="title title--main">Settings</h3>
+             <h3 class="title title--main">Ustawienia</h3>
            </div>
 
            <div class="modal-body body">
              <!-- quantity probes -->
              <div class="setting-wrapper">
                <div class="setting">
-                  <label for="window" class="label label--window">Quantity probes</label>
+                  <label for="windowInput" class="label label--window">Dana1</label>
                   <input
                     ref="windowInput"
+                    id="windowInput"
                     type="number"
                     class="input input--window"
                     min="1"
@@ -28,7 +29,7 @@
              <!-- N.O. probes -->
              <div class="setting-wrapper">
                <div class="setting">
-                 <label for="pointsNumber" class="label label--window">N.O. probes:</label>
+                 <label for="pointsNumber" class="label label--window">Dana2</label>
                  <input
                    ref="pointsNumber"
                    id="pointsNumber"
@@ -41,56 +42,11 @@
                </div>
              </div>
              <!--e/o N.O. probes -->
-
-             <!-- window width -->
-             <div class="setting-wrapper">
-               <div class="setting">
-                 <label for="window" class="label label--window">Window width:</label>
-                 <input
-                   ref="windowInput"
-                   id="window"
-                   type="number"
-                   class="input input--window"
-                   min="1"
-                   :value="$store.state.windowWidth"
-                   required
-                 >
-               </div>
-             </div>
-             <!--e/o window width -->
-
-             <!-- rules settings -->
-             <div class="setting-wrapper">
-               <p class="title title--rules">
-                 Rules to execute
-               </p>
-
-               <div
-                 v-for="rule in $store.state.rules"
-                 :key="rule.idx"
-                 class="rules rules-wrapper"
-               >
-                 <div class="setting">
-                   <input
-                     type="checkbox"
-                     :ref="`rule${rule.idx}`"
-                     :id="`rule${rule.idx}`"
-                     :checked="rule.checked"
-                     class="checkbox"
-                   >
-
-                   <label :for="`rule${rule.idx}`" class="label" v-text="rule.name"/>
-
-                   <Tooltip :description="rule.description"/>
-                 </div>
-               </div>
-             </div>
-             <!-- rules settings -->
            </div>
 
            <div class="modal-footer footer">
              <button class="modal-button button" @click.prevent="submitForm">
-               OK
+               Potwierdź
              </button>
            </div>
          </form>
@@ -100,11 +56,9 @@
 </template>
 
 <script>
-import Tooltip from './tooltip'
 
 export default {
   components: {
-    Tooltip
   },
   data () {
     return {
@@ -115,24 +69,6 @@ export default {
     submitForm () {
       this.$emit('close')
       this.showModal = false
-
-      const updatedRules = []
-
-
-      this.$store.state.rules.forEach(rule => {
-        const checked = this.$refs[`rule${rule.idx}`][0].checked
-
-        updatedRules.push({
-          idx: rule.idx,
-          nrOfData: rule.nrOfData,
-          name: rule.name,
-          description: rule.description,
-          checked
-        })
-      })
-
-      this.$store.commit('updateWindowWidth', this.$refs.windowInput.value)
-      this.$store.commit('updateSelectedRules', updatedRules)
     }
   }
 }
@@ -224,7 +160,6 @@ export default {
     background-color: #4a4e69;
   }
 }
-
 
 // modal animation
 .modal-enter {

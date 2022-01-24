@@ -1,25 +1,13 @@
-# SPC - Statistical Process Control
+# Odlewnictwo
 
 ## Description
-Application to generate control chart (process-behavior chart) from selected csv file.
-<br>
-Chart is watching for changes in data in file and updating chart.
-<br><br>
-In settings it is possible to change:
-- quantity probes (default 5),
-- number of probes to create chart (default 6),
-- window width (default 15),
-- SPC rules (default every eight the most popular rules)
+Aplikacja do obliczeń układu wlewowego
 
 
 ## Project setup
 ```
 npm install
 ```
-
-## Built with
-- Vue.js
-- Chart.js + Vue chart.js
 
 ### Compiles and hot-reloads for development
 ```

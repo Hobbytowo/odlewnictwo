@@ -6,6 +6,7 @@ import {
   installVueDevtools
 } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -57,7 +58,7 @@ app.on('activate', () => {
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
     // Install Vue Devtools
-    await installVueDevtools()
+    await installExtension(VUEJS_DEVTOOLS)
   }
   createWindow()
 })

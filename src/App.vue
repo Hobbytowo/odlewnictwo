@@ -2,7 +2,7 @@
   <div class="container">
     <header class="header">
       <h1 class="app-title">
-        Statistical Process Control
+        Aplikacja do obliczeń układu wlewowego
       </h1>
 
       <button
@@ -14,18 +14,6 @@
       </button>
     </header>
 
-    <form-csv
-      @setIsFileSelectedStatus="setIsFileSelectedStatus"
-    />
-
-    <chart
-      v-if="isFileWatching"
-    />
-    <div v-else class="no-file-info">
-      <p>None file is watching</p>
-      <p>Click on "add file" icon, select file and start watching it</p>
-    </div>
-
     <settings-modal
       v-if="showSettings"
       @close="showSettings = false"
@@ -34,9 +22,7 @@
 </template>
 
 <script>
-import formCsv from '@/components/form-csv'
-import chart from '@/components/chart'
-import SettingsImg from "./components/images/settings";
+import SettingsImg from "./components/icons/settings";
 import SettingsModal from "./components/settings";
 
 export default {
@@ -44,8 +30,6 @@ export default {
   components: {
     SettingsImg,
     SettingsModal,
-    formCsv,
-    chart
   },
   data() {
    return {
@@ -53,11 +37,6 @@ export default {
      isFileWatching: false
     }
   },
-  methods: {
-    setIsFileSelectedStatus (boolean) {
-      this.isFileWatching = boolean
-    }
-  }
 }
 </script>
 
